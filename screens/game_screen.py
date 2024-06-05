@@ -20,8 +20,6 @@ class GameScreen(ScreenBase):
         ai: bool = False,
     ) -> None:
         super().__init__(title, width, height)
-
-    def initMaze(self, maze: Maze, ai: bool = False) -> None:
         self.maze = maze
         self.ai = ai
         self.player = Player(self.maze.player_start, 2)
@@ -56,7 +54,8 @@ class GameScreen(ScreenBase):
                 self.player.rect = new_rect
 
         if self.objective.check_collision(self.player.rect):
-            print("Objective reached")
+            self.done = True
+            self.next_screen = "main_menu_screen"
 
         for event in events:
             if event.type == pygame.QUIT:

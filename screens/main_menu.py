@@ -1,26 +1,34 @@
-from .screen_base import ScreenBase
+from .screen_base import *
 import pygame
+from .button import Button
 
 
 class MainMenu(ScreenBase):
     def __init__(self, title: str, width: int, height: int) -> None:
         super().__init__(title, width, height)
+        font = pygame.font.Font(None, 36)
+        self.play_button = Button(
+            text="Play", position=(100, 100), font=font, callback=self.start_game
+        )
+        self.options_button = Button(text="Options", position=(100, 250), font=font)
+        self.quit_button = Button(
+            text="Quit", position=(100, 500), font=font, callback=pygame.quit
+        )
+        self.buttons = pygame.sprite.Group(
+            self.play_button, self.options_button, self.quit_button
+        )
+        self.selected_maze = None
 
     def draw(self, screen: pygame.Surface) -> None:
         super(MainMenu, self).draw(screen)
-        screen.fill((255, 255, 255))
-        font = pygame.font.Font(None, 36)
-        text = font.render("Press SPACE to start", True, (0, 0, 0))
-        text_rect = text.get_rect(center=(self.width // 2, self.height // 2))
-        screen.blit(text, text_rect)
+        self.buttons.draw(screen)
 
     def update(self, events: list, keys) -> None:
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    self.next = "game"
-                    self.done = True
-                    break
+            self.buttons.update(event)
 
     def makeCurrent(self) -> None:
-        pass
+        super
+
+    def start_game(self):
+        super().change_screen(GAME)

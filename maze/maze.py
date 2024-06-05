@@ -10,7 +10,7 @@ class Maze:
         rows: int,
         columns: int,
         player_start: tuple[int, int] = (0, 0),
-        objective_position: tuple[int, int] = (0, 0),
+        objective_position: tuple[int, int] = (100, 100),
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -46,7 +46,7 @@ class Maze:
         for row in self.grid:
             for cell in row:
                 if random.random() < 0.2:
-                    cell.change_collidable()
+                    cell.change_collidable(True)
                     self.collidable_cells.append(cell)
 
     def generate_maze(self):

@@ -15,8 +15,11 @@ class Cell:
     def draw(self, screen: Surface) -> None:
         screen.blit(self.image, self.rect)
 
-    def change_collidable(self) -> None:
-        self.collidable = not self.collidable
+    def change_collidable(self, collidable=False) -> None:
+        if collidable:
+            self.collidable = collidable
+        else:
+            self.collidable = not self.collidable
         self.image.fill((255, 0, 0) if self.collidable else (0, 255, 0))
 
     def __repr__(self) -> str:
