@@ -11,7 +11,7 @@ class Objective(Sprite):
         self.rect.x = position[0]
         self.rect.y = position[1]
 
-    def draw(self, screen):
+    def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)
 
     def check_collision(self, rect):
