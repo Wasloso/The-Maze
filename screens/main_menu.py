@@ -28,7 +28,7 @@ class MainMenu(ScreenBase):
             self.buttons.update(event)
 
     def makeCurrent(self) -> None:
-        super
+        super().makeCurrent()
 
     def start_game(self):
         super().change_screen(GAME)

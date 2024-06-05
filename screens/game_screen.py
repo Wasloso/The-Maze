@@ -57,10 +57,5 @@ class GameScreen(ScreenBase):
             self.done = True
             self.next_screen = "main_menu_screen"
 
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
     def makeCurrent(self) -> None:
         pass
