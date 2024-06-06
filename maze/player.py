@@ -2,9 +2,11 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, start_position: tuple[int, int], velocity: float):
+    def __init__(
+        self, start_position: tuple[int, int], velocity: float, size: int = 15
+    ):
         super().__init__()
-        self.image = pygame.Surface((15, 15))
+        self.image = pygame.Surface((size, size))
         self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x = start_position[0]

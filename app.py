@@ -2,10 +2,11 @@ import pygame
 from screens import *
 from screens.screen_base import *
 from maze import Maze
+import json
 
 
 class App:
-    def __init__(self, width=800, heigth=600) -> None:
+    def __init__(self, width=1000, heigth=750) -> None:
         pygame.init()
         pygame.font.init()
         self.width = width
@@ -24,8 +25,10 @@ class App:
         screen = pygame.display.set_mode((self.width, self.heigth))
         clock = pygame.time.Clock()
         running = True
-        maze = Maze(50, 15, 20)
-
+        file = open("data/saved_mazes.json", "r")
+        data = json.load(file)
+        maze = Maze.from_json(data["Maze1"])
+        print(maze)
         while running:
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
@@ -40,7 +43,6 @@ class App:
                     self.screens[GAME] = GameScreen(
                         "Game", self.width, self.heigth, maze
                     )
-                    self.screens[GAME].maze.randomize_maze()
                 self.current_screen = self.screens[self.current_screen.next_screen]
                 self.current_screen.makeCurrent()
 

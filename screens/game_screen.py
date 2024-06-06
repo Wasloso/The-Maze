@@ -22,8 +22,10 @@ class GameScreen(ScreenBase):
         super().__init__(title, width, height)
         self.maze = maze
         self.ai = ai
-        self.player = Player(self.maze.player_start, 2)
-        self.objective = Objective(self.maze.objective_position)
+        self.player = Player(self.maze.player_start, 2, size=self.maze.cell_size // 3)
+        self.objective = Objective(
+            self.maze.objective_position, size=self.maze.cell_size // 3
+        )
 
     def draw(self, screen: Surface) -> None:
         screen.fill((0, 0, 0))

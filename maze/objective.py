@@ -3,9 +3,9 @@ from pygame import Surface
 
 
 class Objective(Sprite):
-    def __init__(self, position: tuple[int, int]):
+    def __init__(self, position: tuple[int, int], size: int = 15):
         super().__init__()
-        self.image = Surface((15, 15))
+        self.image = Surface((size, size))
         self.image.fill((0, 0, 255))
         self.rect = self.image.get_rect()
         self.rect.x = position[0]
