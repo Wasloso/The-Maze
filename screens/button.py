@@ -8,21 +8,29 @@ class Button(Sprite):
         self,
         position: tuple[int, int],
         image: pygame.Surface,
+        altImage: pygame.Surface = None,
         callback: callable = None,
+        desiredSize=(200, 100),
     ) -> None:
         super().__init__()
-        self.image = image
+        self.image = pygame.transform.scale(image, desiredSize)
+        self.altImage = (
+            pygame.transform.scale(altImage, desiredSize) if altImage else None
+        )
         self.rect = self.image.get_rect()
-        self.rect.topleft = position
+        self.rect.center = position
+        self.displayImage = self.image
+        self.desiredSize = desiredSize
         self.callback = callback
 
     def draw(self, screen: pygame.Surface) -> None:
-        screen.blit(self.image, self.rect)
+        screen.blit(self.displayImage, self.rect)
 
     def update(self, event: pygame.event.Event) -> None:
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if self.rect.collidepoint(event.pos):
-                if self.callback:
-                    self.callback()
-                else:
-                    print(f"Button clicked!")
+        pos = pygame.mouse.get_pos()
+        hovered = self.rect.collidepoint(pos)
+        self.displayImage = (
+            self.image if not hovered or not self.altImage else self.altImage
+        )
+        if event.type == pygame.MOUSEBUTTONDOWN and hovered:
+            self.callback()
