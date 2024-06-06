@@ -29,6 +29,12 @@ class GameScreen(ScreenBase):
         self.objective = Objective(
             self.maze.objective_position, size=self.maze.cell_size // 3
         )
+        self.directions = {
+            pygame.K_UP: (0, -1),
+            pygame.K_DOWN: (0, 1),
+            pygame.K_LEFT: (-1, 0),
+            pygame.K_RIGHT: (1, 0),
+        }
 
     def draw(self, screen: Surface) -> None:
         screen.fill((0, 0, 0))
@@ -37,27 +43,25 @@ class GameScreen(ScreenBase):
         self.objective.draw(screen)
 
     def update(self, events: list, keys) -> None:
+        # opcjonalny shift for speed
+        multiplier = 2 if keys[pygame.K_LSHIFT] else 1
         if keys[pygame.K_UP]:
-            new_rect = self.player.try_move(0, -1)
-            if not self.maze.check_collision(new_rect):
-                self.player.rect = new_rect
+            self.move_player(pygame.K_UP, multiplier)
         if keys[pygame.K_DOWN]:
-            new_rect = self.player.try_move(0, 1)
-            if not self.maze.check_collision(new_rect):
-                self.player.rect = new_rect
+            self.move_player(pygame.K_DOWN, multiplier)
         if keys[pygame.K_LEFT]:
-            new_rect = self.player.try_move(-1, 0)
-            if not self.maze.check_collision(new_rect):
-                self.player.rect = new_rect
+            self.move_player(pygame.K_LEFT, multiplier)
         if keys[pygame.K_RIGHT]:
-            new_rect = self.player.try_move(1, 0)
-
-            if not self.maze.check_collision(new_rect):
-                self.player.rect = new_rect
-
+            self.move_player(pygame.K_RIGHT, multiplier)
         if self.objective.check_collision(self.player.rect):
             self.done = True
             self.next_screen = "main_menu_screen"
+
+    def move_player(self, direction, multiplier=1):
+        move = self.directions[direction]
+        new_rect = self.player.try_move(move[0] * multiplier, move[1] * multiplier)
+        if not self.maze.check_collision(new_rect):
+            self.player.rect = new_rect
 
     def makeCurrent(self) -> None:
         pass
