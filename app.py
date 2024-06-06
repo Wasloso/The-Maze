@@ -28,7 +28,6 @@ class App:
         file = open("data/saved_mazes.json", "r")
         data = json.load(file)
         maze = Maze.from_json(data["Maze1"])
-        print(maze)
         while running:
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
@@ -37,6 +36,7 @@ class App:
                     running = False
 
             self.current_screen.update(events, keys)
+
             self.current_screen.draw(screen)
             if self.current_screen.done:
                 if self.current_screen.next_screen == GAME:
