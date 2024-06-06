@@ -7,12 +7,15 @@ class MainMenu(ScreenBase):
     def __init__(self, title: str, width: int, height: int) -> None:
         super().__init__(title, width, height)
         font = pygame.font.Font(None, 36)
+        play_image = pygame.image.load("assets/button_play.png")
         self.play_button = Button(
-            text="Play", position=(100, 100), font=font, callback=self.start_game
+            image=play_image, position=(100, 100), callback=self.start_game
         )
-        self.options_button = Button(text="Options", position=(100, 250), font=font)
+        self.options_button = Button(
+            image=play_image, position=(100, 100), callback=self.start_game
+        )
         self.quit_button = Button(
-            text="Quit", position=(100, 500), font=font, callback=pygame.quit
+            image=play_image, position=(100, 100), callback=self.start_game
         )
         self.buttons = pygame.sprite.Group(
             self.play_button, self.options_button, self.quit_button

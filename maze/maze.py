@@ -11,9 +11,9 @@ class Maze:
         self,
         cell_size: int,
         rows: int = 20,
-        columns: int = 15,
-        player_start: tuple[int, int] = (0, 0),
-        objective_position: tuple[int, int] = (100, 100),
+        columns: int = 32,
+        player_start: tuple[int, int] = None,
+        objective_position: tuple[int, int] = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -94,8 +94,6 @@ class Maze:
         columns = len(grid)
         rows = len(grid[0])
         maze = Maze(json["cell_size"], rows, columns)
-        maze.player_start = ast.literal_eval(json["player_start"])
-        maze.objective_position = ast.literal_eval(json["objective_position"])
         maze.grid = []
         for j, row in enumerate(grid):
             maze_row = []
@@ -107,6 +105,10 @@ class Maze:
                     maze_row.append(cell)
                     maze.collidable_cells.append(cell)
                 else:
+                    if cell == "P":
+                        maze.player_start = maze.set_rect_position(j, i)
+                    elif cell == "O":
+                        maze.objective_position = maze.set_rect_position(j, i)
                     maze_row.append(
                         Cell(
                             maze.cell_size,
@@ -118,3 +120,9 @@ class Maze:
             maze.grid.append(maze_row)
 
         return maze
+
+    def set_rect_position(self, row, column):
+        return (
+            column * self.cell_size + self.cell_size // 2,
+            row * self.cell_size + self.cell_size // 2,
+        )

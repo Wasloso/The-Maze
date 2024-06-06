@@ -6,7 +6,7 @@ import json
 
 
 class App:
-    def __init__(self, width=1000, heigth=750) -> None:
+    def __init__(self, width=1280, heigth=760) -> None:
         pygame.init()
         pygame.font.init()
         self.width = width

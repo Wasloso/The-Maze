@@ -8,8 +8,7 @@ class Objective(Sprite):
         self.image = Surface((size, size))
         self.image.fill((0, 0, 255))
         self.rect = self.image.get_rect()
-        self.rect.x = position[0]
-        self.rect.y = position[1]
+        self.rect.center = position
 
     def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)

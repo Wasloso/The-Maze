@@ -6,15 +6,12 @@ from pygame.font import Font
 class Button(Sprite):
     def __init__(
         self,
-        text: str,
         position: tuple[int, int],
-        font: Font,
+        image: pygame.Surface,
         callback: callable = None,
     ) -> None:
         super().__init__()
-        self.text = text
-        self.font = font
-        self.image = self.font.render(text, True, (255, 255, 255))
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = position
         self.callback = callback
@@ -28,4 +25,4 @@ class Button(Sprite):
                 if self.callback:
                     self.callback()
                 else:
-                    print(f"Button {self.text} clicked!")
+                    print(f"Button clicked!")

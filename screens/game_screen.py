@@ -22,7 +22,10 @@ class GameScreen(ScreenBase):
         super().__init__(title, width, height)
         self.maze = maze
         self.ai = ai
-        self.player = Player(self.maze.player_start, 2, size=self.maze.cell_size // 3)
+        player_img = pygame.image.load("assets/player.png")
+        self.player = Player(
+            self.maze.player_start, 2, size=self.maze.cell_size // 3, image=None
+        )
         self.objective = Objective(
             self.maze.objective_position, size=self.maze.cell_size // 3
         )
@@ -42,13 +45,10 @@ class GameScreen(ScreenBase):
             new_rect = self.player.try_move(0, 1)
             if not self.maze.check_collision(new_rect):
                 self.player.rect = new_rect
-
         if keys[pygame.K_LEFT]:
             new_rect = self.player.try_move(-1, 0)
-
             if not self.maze.check_collision(new_rect):
                 self.player.rect = new_rect
-
         if keys[pygame.K_RIGHT]:
             new_rect = self.player.try_move(1, 0)
 
