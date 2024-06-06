@@ -8,25 +8,36 @@ class MainMenu(ScreenBase):
         super().__init__(title, width, height)
         font = pygame.font.Font(None, 36)
         play_image = pygame.image.load("assets/button_play.png")
+        alt = pygame.surface.Surface((200, 100))
+        alt.fill((255, 0, 0))
         self.play_button = Button(
-            image=play_image, position=(100, 100), callback=self.start_game
+            image=play_image,
+            position=(self.width // 2, self.height // 2),
+            callback=self.start_game,
         )
-        self.options_button = Button(
-            image=play_image, position=(100, 100), callback=self.start_game
-        )
-        self.quit_button = Button(
-            image=play_image, position=(100, 100), callback=self.start_game
-        )
-        self.buttons = pygame.sprite.Group(
-            self.play_button, self.options_button, self.quit_button
-        )
+
+        # self.options_button = Button(
+        #     image=play_image,
+        #     position=(100, 100),
+        #     callback=self.start_game,
+        #     altImage=alt,
+        # )
+        # self.quit_button = Button(
+        #     image=play_image,
+        #     position=(100, 100),
+        #     callback=self.start_game,
+        #     altImage=alt,
+        # )
+        self.buttons = pygame.sprite.Group(self.play_button)
         self.selected_maze = None
 
     def draw(self, screen: pygame.Surface) -> None:
         super(MainMenu, self).draw(screen)
-        self.buttons.draw(screen)
+        # Musi byc tak zamiast self.buttons.draw(screen) bo inaczej nie dziala on hover image
+        for button in self.buttons:
+            button.draw(screen)
 
-    def update(self, events: list, keys) -> None:
+    def update(self, events, keys) -> None:
         for event in events:
             self.buttons.update(event)
 
