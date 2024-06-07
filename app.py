@@ -10,9 +10,9 @@ class App:
     def __init__(self, width=1280, heigth=800) -> None:
         pygame.init()
         pygame.font.init()
+        pygame.display.set_caption("The Maze")
         self.width = width
         self.heigth = heigth
-        pygame.display.set_caption("The Maze")
         self.screen = pygame.display.set_mode((self.width, self.heigth))
         """Dictionary of screens used in app. Main menu, options and play are kindof static - they dont change, but game screen is created when needed."""
         self.screens: dict[str, ScreenBase] = {
@@ -22,6 +22,7 @@ class App:
             GAME: None,
         }
         self.current_screen = self.screens[MAIN_MENU]
+        self.current_screen.makeCurrent()
 
     def run(self) -> None:
 
@@ -35,7 +36,6 @@ class App:
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
             self.handle_events(events, keys)
-
             if self.current_screen.done:
                 if self.current_screen.next_screen == GAME:
                     self.screens[GAME] = GameScreen(

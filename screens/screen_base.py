@@ -1,6 +1,9 @@
 import pygame
 from abc import ABC, abstractmethod
-from .button import Button
+import sys
+
+sys.path.append("../")
+from ui_components.ui_component import UIComponent
 
 MAIN_MENU = "main_menu_screen"
 PLAY = "play_screen"
@@ -31,17 +34,11 @@ class ScreenBase(ABC):
         self.done: bool = False
         self.next_screen: str = None
         self.previous = previous
-        if backgroundImage:
-            self.backgroundImage = pygame.transform.scale(
-                backgroundImage, (self.width, self.height)
-            )
-        else:
-            self.backgroundImage = pygame.Surface((self.width, self.height))
-            self.backgroundImage.fill((0, 0, 0))
+        self.backgroundImage = UIComponent((0, 0), backgroundImage, (width, height))
 
     @abstractmethod
     def draw(self, screen: pygame.Surface) -> None:
-        screen.blit(self.backgroundImage, (0, 0))
+        self.backgroundImage.draw(screen)
 
     @abstractmethod
     def update(self, events: list, keys) -> None:
@@ -50,7 +47,6 @@ class ScreenBase(ABC):
     @abstractmethod
     def makeCurrent(self) -> None:
         # to moze mozna lepiej zrobic, w ogole cale zmienianie ekranow jest mozliwe do poprawienia xd
-        self.screen = pygame.display.set_mode((self.width, self.height))
         self.done = False
         self.next_screen = None
 

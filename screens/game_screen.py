@@ -4,7 +4,7 @@ import pygame
 
 sys.path.append("../")
 
-from screens.screen_base import ScreenBase
+from screens.screen_base import *
 from maze.maze import Maze
 from maze.player import Player
 from maze.objective import Objective
@@ -40,7 +40,7 @@ class GameScreen(ScreenBase):
         self.handle_buttons_click(keys)
         if self.objective.check_collision(self.player.rect):
             self.done = True
-            self.next_screen = "main_menu_screen"
+            self.next_screen = MAIN_MENU
         super().update(events, keys)
 
     def handle_buttons_click(self, keys):

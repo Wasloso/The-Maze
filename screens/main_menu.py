@@ -1,6 +1,9 @@
 from .screen_base import *
 import pygame
-from .button import Button
+import sys
+
+sys.path.append("../")
+from ui_components.button import Button
 
 
 class MainMenu(ScreenBase):
@@ -33,7 +36,7 @@ class MainMenu(ScreenBase):
         self.selected_maze = None
 
     def draw(self, screen: pygame.Surface) -> None:
-        super(MainMenu, self).draw(screen)
+        super().draw(screen)
         for button in self.buttons:
             button.draw(screen)
 
