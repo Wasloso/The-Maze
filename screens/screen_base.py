@@ -17,8 +17,8 @@ class ScreenBase(ABC):
         title: str,
         width: int,
         height: int,
+        screenName: str = MAIN_MENU,
         previous=MAIN_MENU,
-        backgroundImage: pygame.Surface = None,
     ) -> None:
         """
         Screen class which is base for all screens in the app.
@@ -28,17 +28,22 @@ class ScreenBase(ABC):
         :param previous: Name of the previous screen
         :param backgroundImage: Background image of the screen, if None, screen will be black
         """
+        self.screenName = screenName
         self.height: int = height
         self.width: int = width
         self.title: str = title
         self.done: bool = False
         self.next_screen: str = None
         self.previous = previous
-        self.backgroundImage = UIComponent((0, 0), backgroundImage, (width, height))
+        self.background = UIComponent(
+            (0, 0),
+            (width, height),
+            pygame.image.load(f"assets/backgrounds/{self.screenName}.png"),
+        )
 
     @abstractmethod
     def draw(self, screen: pygame.Surface) -> None:
-        self.backgroundImage.draw(screen)
+        self.background.draw(screen)
 
     @abstractmethod
     def update(self, events: list, keys) -> None:
