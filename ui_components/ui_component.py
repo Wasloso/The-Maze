@@ -14,8 +14,8 @@ class UIComponent(Sprite):
     def __init__(
         self,
         position: tuple[int, int],
-        image: Surface,
         desiredSize: tuple[int, int],
+        image: Surface = None,
         fill: tuple[int, int, int] = (0, 0, 0),
     ) -> None:
         super().__init__()
