@@ -1,4 +1,5 @@
 import pygame
+from pygame.event import Event
 from screens import *
 from screens.screen_base import *
 from maze import Maze
@@ -6,11 +7,14 @@ import json
 
 
 class App:
-    def __init__(self, width=1280, heigth=760) -> None:
+    def __init__(self, width=1280, heigth=800) -> None:
         pygame.init()
         pygame.font.init()
         self.width = width
         self.heigth = heigth
+        pygame.display.set_caption("The Maze")
+        self.screen = pygame.display.set_mode((self.width, self.heigth))
+        """Dictionary of screens used in app. Main menu, options and play are kindof static - they dont change, but game screen is created when needed."""
         self.screens: dict[str, ScreenBase] = {
             MAIN_MENU: MainMenu("Main Menu", self.width, self.heigth),
             PLAY: PlayScreen("Play", self.width, self.heigth),
@@ -21,23 +25,17 @@ class App:
 
     def run(self) -> None:
 
-        pygame.display.set_caption("Main Menu")
-        screen = pygame.display.set_mode((self.width, self.heigth))
         clock = pygame.time.Clock()
-        running = True
+        self.running = True
         file = open("data/saved_mazes.json", "r")
         data = json.load(file)
-        maze = Maze.from_json(data["Maze1"])
-        while running:
+        maze = Maze.from_json(data["Spiral"])
+
+        while self.running:
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    running = False
+            self.handle_events(events, keys)
 
-            self.current_screen.update(events, keys)
-
-            self.current_screen.draw(screen)
             if self.current_screen.done:
                 if self.current_screen.next_screen == GAME:
                     self.screens[GAME] = GameScreen(
@@ -48,6 +46,13 @@ class App:
 
             pygame.display.flip()
             clock.tick(60)
+
+    def handle_events(self, events: list[Event], keys):
+        for event in events:
+            if event.type == pygame.QUIT:
+                self.running = False
+        self.current_screen.update(events, keys)
+        self.current_screen.draw(self.screen)
 
 
 if __name__ == "__main__":
