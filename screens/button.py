@@ -12,6 +12,7 @@ class Button(Sprite):
         callback: callable = None,
         desiredSize=(200, 100),
     ) -> None:
+        """Image is the main display image. Altimage appears when the button is hovered"""
         super().__init__()
         self.image = pygame.transform.scale(image, desiredSize)
         self.altImage = (
