@@ -1,36 +1,39 @@
 from .screen_base import *
 import pygame
+from pygame.sprite import Group
 import sys
 
 sys.path.append("../")
 from ui_components.button import Button
+from ui_components.volume_controller import VolumeController
 
 
 class MainMenu(ScreenBase):
     def __init__(self, title: str, width: int, height: int) -> None:
-        super().__init__(title, width, height)
-        play_image = pygame.image.load("assets/button_play.png")
+        super().__init__(title, width, height, screenName=MAIN_MENU)
+        play_image = pygame.image.load("assets/buttons/button_play.png")
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
         self.play_button = Button(
             image=play_image,
-            position=(self.width // 2, self.height // 2 + 200),
-            callback=self.start_game,
-        )
-
-        self.options_button = Button(
-            image=play_image,
-            position=(self.width // 2, self.height // 2),
-            callback=self.start_game,
-            altImage=alt,
-        )
-        self.quit_button = Button(
-            image=play_image,
             position=(self.width // 2, self.height // 2 - 200),
             callback=self.start_game,
+        )
+        options_image = pygame.image.load("assets/buttons/placeholder.png")
+        self.options_button = Button(
+            image=options_image,
+            position=(self.width // 2, self.height // 2),
+            callback=self.open_options,
             altImage=alt,
         )
-        self.buttons = pygame.sprite.Group(
+        quit_image = pygame.image.load("assets/buttons/placeholder.png")
+        self.quit_button = Button(
+            image=quit_image,
+            position=(self.width // 2, self.height // 2 + 200),
+            callback=self.start_game,
+            altImage=alt,
+        )
+        self.buttons: Group[Button] = pygame.sprite.Group(
             self.play_button, self.options_button, self.quit_button
         )
         self.selected_maze = None
@@ -49,3 +52,6 @@ class MainMenu(ScreenBase):
 
     def start_game(self):
         super().change_screen(GAME)
+
+    def open_options(self):
+        super().change_screen(OPTIONS)
