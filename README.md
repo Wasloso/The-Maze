@@ -8,29 +8,43 @@ bla bla bla descripton
     - Settings manager
     - Settings screen
         - Volume controller
-        - Dark/Light mode
+        - optional: Dark/Light mode 
         - ???
 - Maze
-    - Mazes manager
+    - Mazes manager (play_screen)
         - Load saved mazes
         - Add new
         - Delete existing
         - Modify
-    - Maze creator
+        - Maze creator
+    - Fog of war
     - "AI"
+    - should we change cell to be Sprite subclass, so we can use cells.draw() instead of for cell in cells...???
+    - POWER UPS IF WE GET BORED
+        - can go through a wall
+        - teleport closer to the objective
+        - extra speeeeeeeeeeed
+        - go rainbow like mario
+        - spawn an enemy that chases you for idk 10 seconds 
 - Assets
     - Graphics
         - Backgrounds
         - Buttons
         - Player
-            - Maybe different images depending on the move direction
+            - optional: Different images for each direction (up, down etc.) 
         - Maze
+            - wall
+            - floors
+            - optional: Different image depending on neighbors eg. when a floor cell has floor cell to the right the floor image is a right-way path etc
         - Objective
-    - Optionally sounds
+    - Sounds:
+        - walking
+        - background music
+        - achieved objective
 
 # TO BE FIXED
-- UIComponents
-    - When they're grouped with pygame.Sprite.Group() the draw() method doesnt work at all
+- Buttons
+    - can't create a sprites.group() as the draw() method doesnt work properly
 - How to make quit button that doesn't give an error (well at least it closes the game)
 
 

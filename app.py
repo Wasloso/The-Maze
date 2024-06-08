@@ -14,7 +14,6 @@ class App:
         self.width = width
         self.heigth = heigth
         self.screen = pygame.display.set_mode((self.width, self.heigth))
-        """Dictionary of screens used in app. Main menu, options and play are kindof static - they dont change, but game screen is created when needed."""
         self.screens: dict[str, ScreenBase] = {
             MAIN_MENU: MainMenu("Main Menu", self.width, self.heigth),
             PLAY: PlayScreen("Play", self.width, self.heigth),
@@ -33,7 +32,6 @@ class App:
         maze = Maze.from_json(data["Spiral"])
 
         while self.running:
-            clock.tick(60)
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
             self.handle_events(events, keys)
@@ -44,7 +42,7 @@ class App:
                     )
                 self.current_screen = self.screens[self.current_screen.next_screen]
                 self.current_screen.makeCurrent()
-
+            clock.tick(60)
             pygame.display.flip()
 
     def handle_events(self, events: list[Event], keys):
