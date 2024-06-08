@@ -1,39 +1,42 @@
-from typing import Any
 from pygame.image import load
 from pygame.surface import Surface
+import os
 
 
 # I think it can be done better
 class AssetsLoader:
-    _dir = "assets/"
-    _backgroundDir = _dir + "backgrounds/"
-    _buttonDir = _dir + "buttons/"
-    _playerDir = _dir + "player/"
+    _dir = "assets"
+    _backgroundDir = os.path.join(_dir, "backgrounds")
+    _buttonDir = os.path.join(_dir, "buttons")
+    _playerDir = os.path.join(_dir, "player")
+    _mazeDir = os.path.join(_dir, "maze")
 
     paths = {
         "background": {
-            "main_menu_screen": _backgroundDir + "main_menu_screen.png",
-            "play_screen": _backgroundDir + "play_screen.png",
-            "options_screen": _backgroundDir + "options_screen.png",
-            "game_screen": _backgroundDir + "game_screen.png",
+            "main_menu_screen": os.path.join(_backgroundDir, "main_menu_screen.png"),
+            "play_screen": os.path.join(_backgroundDir, "play_screen.png"),
+            "options_screen": os.path.join(_backgroundDir, "options_screen.png"),
+            "game_screen": os.path.join(_backgroundDir, "game_screen.png"),
         },
         "button": {
-            "play_button": _buttonDir + "play_button.png",
-            "options_button": _buttonDir + "options_button.png",
-            "exit_button": _buttonDir + "exit_button.png",
-            "back_button": _buttonDir + "back_button.png",
+            "play_button": os.path.join(_buttonDir, "play_button.png"),
+            "settings_button": os.path.join(_buttonDir, "settings_button.png"),
+            "exit_button": os.path.join(_buttonDir, "exit_button.png"),
+            "back_button": os.path.join(_buttonDir, "back_button.png"),
+            "credits_button": os.path.join(_buttonDir, "credits_button.png"),
+            "back_button": os.path.join(_buttonDir, "back_button.png"),
         },
         "player": {
-            "idle": _playerDir + "idle.png",
-            "walk_UP": _playerDir + "walk_UP.png",
-            "walk_DOWN": _playerDir + "walk_DOWN.png",
-            "walk_LEFT": _playerDir + "walk_LEFT.png",
-            "walk_RIGHT": _playerDir + "walk_RIGHT.png",
+            "idle": os.path.join(_playerDir, "idle.png"),
+            "walk_UP": os.path.join(_playerDir, "walk_UP.png"),
+            "walk_DOWN": os.path.join(_playerDir, "walk_DOWN.png"),
+            "walk_LEFT": os.path.join(_playerDir, "walk_LEFT.png"),
+            "walk_RIGHT": os.path.join(_playerDir, "walk_RIGHT.png"),
         },
-        "objective": "assets/objective.png",
+        "objective": os.path.join(_dir, "objective.png"),
         "maze": {
-            "wall": "assets/maze/wall.png",
-            "floor": "assets/maze/floor.png",
+            "wall": os.path.join(_mazeDir, "wall.png"),
+            "floor": os.path.join(_mazeDir, "floor.png"),
         },
     }
 
@@ -42,9 +45,12 @@ class AssetsLoader:
         try:
             path = AssetsLoader.paths[category][name]
             return load(path)
-        except (KeyError, FileNotFoundError):
-            print(f"Missing image: {category}/{name}")
-            return load("assets/missing.png")
+        except KeyError:
+            print(f"Image {name} not found in category {category}.")
+            return load(os.path.join(AssetsLoader._dir, "missing.png"))
+        except FileNotFoundError:
+            print(f"File {path} not found.")
+            return load(os.path.join(AssetsLoader._dir, "missing.png"))
 
     @classmethod
     def get_background(cls, name: str) -> Surface:
