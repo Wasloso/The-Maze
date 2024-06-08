@@ -18,6 +18,7 @@ class App:
             MAIN_MENU: MainMenu("Main Menu", self.width, self.heigth),
             PLAY: PlayScreen("Play", self.width, self.heigth),
             OPTIONS: OptionsScreen("Options", self.width, self.heigth),
+            CREDITS: CreditsScreen("Credits", self.width, self.heigth),
             GAME: None,
         }
         self.current_screen = self.screens[MAIN_MENU]
@@ -40,6 +41,10 @@ class App:
                     self.screens[GAME] = GameScreen(
                         "Game", self.width, self.heigth, maze
                     )
+                if not self.current_screen.next_screen:
+                    # its stupid but it works (check main_menu.py exit_button)
+                    pygame.quit()
+                    break
                 self.current_screen = self.screens[self.current_screen.next_screen]
                 self.current_screen.makeCurrent()
             clock.tick(60)
