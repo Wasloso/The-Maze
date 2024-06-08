@@ -4,7 +4,7 @@ from pygame.surface import Surface
 
 
 # I think it can be done better
-class Assets:
+class AssetsLoader:
     _dir = "assets/"
     _backgroundDir = _dir + "backgrounds/"
     _buttonDir = _dir + "buttons/"
@@ -40,9 +40,9 @@ class Assets:
     @staticmethod
     def get_image(category: str, name: str) -> Surface:
         try:
-            path = Assets.paths[category][name]
+            path = AssetsLoader.paths[category][name]
             return load(path)
-        except KeyError:
+        except (KeyError, FileNotFoundError):
             print(f"Missing image: {category}/{name}")
             return load("assets/missing.png")
 
