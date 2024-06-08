@@ -31,7 +31,7 @@ class GameScreen(ScreenBase):
         )
 
     def draw(self, screen: Surface) -> None:
-        super().draw(screen)
+        # super().draw(screen) - renderowanie tla bardzo obniza fps
         self.maze.draw(screen)
         self.player.draw(screen)
         self.objective.draw(screen)
