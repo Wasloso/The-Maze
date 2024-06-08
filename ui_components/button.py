@@ -8,7 +8,7 @@ class Button(UIComponent):
     def __init__(
         self,
         position: tuple[int, int],
-        image: pygame.Surface,
+        image: pygame.Surface = None,
         altImage: pygame.Surface = None,
         callback: callable = None,
         desiredSize=(200, 100),
@@ -18,6 +18,7 @@ class Button(UIComponent):
         self.altImage = (
             pygame.transform.scale(altImage, desiredSize) if altImage else None
         )
+        self.rect.center = position
         self.displayImage = self.image
         self.callback = callback
 
@@ -29,5 +30,5 @@ class Button(UIComponent):
         self.displayImage = (
             self.image if not hovered or not self.altImage else self.altImage
         )
-        if event.type == pygame.MOUSEBUTTONDOWN and hovered:
+        if event.type == pygame.MOUSEBUTTONDOWN and hovered and self.callback:
             self.callback()
