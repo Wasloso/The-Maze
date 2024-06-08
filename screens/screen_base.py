@@ -12,6 +12,7 @@ MAIN_MENU = "main_menu_screen"
 PLAY = "play_screen"
 OPTIONS = "options_screen"
 GAME = "game_screen"
+CREDITS = "credits_screen"
 
 
 class ScreenBase(ABC):
@@ -53,7 +54,6 @@ class ScreenBase(ABC):
     def update(self, events: list, keys) -> None:
         pass
 
-    @abstractmethod
     def makeCurrent(self) -> None:
         # to moze mozna lepiej zrobic, w ogole cale zmienianie ekranow jest mozliwe do poprawienia xd
         self.done = False
