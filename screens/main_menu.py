@@ -17,23 +17,25 @@ class MainMenu(ScreenBase):
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
             position=(self.width // 2, self.height // 2 - 50),
-            callback=self.start_game,
+            callback=lambda: self.change_screen(GAME),
         )
         self.settings_button = Button(
             image=AssetsLoader.get_button("setting_button"),
             position=(self.width // 2, self.height // 2 + 100),
-            callback=self.open_options,
+            callback=lambda: self.change_screen(OPTIONS),
             altImage=alt,
         )
         self.exit_button = Button(
             image=AssetsLoader.get_button("exit_button"),
             position=(150, self.height - 100),
             altImage=alt,
+            callback=lambda: self.change_screen(None),
         )
         self.credits_button = Button(
             image=AssetsLoader.get_button("credits_button"),
             position=(self.width - 150, self.height - 100),
             altImage=alt,
+            callback=lambda: self.change_screen(CREDITS),
         )
         self.buttons: Group[Button] = pygame.sprite.Group(
             self.play_button,
