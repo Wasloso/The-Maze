@@ -2,6 +2,10 @@ import pygame
 from pygame.sprite import Sprite
 from pygame.font import Font
 from .ui_component import UIComponent
+import sys
+
+sys.path.append("../")
+from assets.assets_loader import AssetsLoader
 
 
 class Button(UIComponent):
@@ -32,3 +36,23 @@ class Button(UIComponent):
         )
         if event.type == pygame.MOUSEBUTTONDOWN and hovered and self.callback:
             self.callback()
+
+    @staticmethod
+    def go_back_button(
+        position: tuple[int, int],
+        callback: callable,
+        desiredSize=(200, 100),
+        image=None,
+        altImage=None,
+    ) -> Sprite:
+        return Button(
+            position,
+            AssetsLoader.get_button(
+                "back_button" if not (image and altImage) else image
+            ),
+            AssetsLoader.get_button(
+                "back_button_hovered" if not (image and altImage) else image
+            ),
+            callback,
+            desiredSize,
+        )
