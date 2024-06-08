@@ -8,6 +8,7 @@ from screens.screen_base import *
 from maze.maze import Maze
 from maze.player import Player
 from maze.objective import Objective
+from ui_components.button import Button
 
 
 class GameScreen(ScreenBase):
@@ -29,19 +30,26 @@ class GameScreen(ScreenBase):
         self.objective = Objective(
             self.maze.objective_position, size=self.maze.cell_size // 3
         )
+        self.back_button = Button.go_back_button(
+            (0, 0),
+            lambda: self.change_screen(MAIN_MENU),
+            # TODO: change to play screen when implemented
+        )
 
     def draw(self, screen: Surface) -> None:
         # super().draw(screen) - renderowanie tla bardzo obniza fps
         self.maze.draw(screen)
         self.player.draw(screen)
         self.objective.draw(screen)
+        self.back_button.draw(screen)
 
     def update(self, events: list, keys) -> None:
+        for event in events:
+            self.back_button.update(event)
         self.handle_buttons_click(keys)
         if self.objective.check_collision(self.player.rect):
             self.done = True
             self.next_screen = MAIN_MENU
-        super().update(events, keys)
 
     def handle_buttons_click(self, keys):
         multiplier = 2 if keys[pygame.K_LSHIFT] else 1
