@@ -33,6 +33,7 @@ class App:
         maze = Maze.from_json(data["Spiral"])
 
         while self.running:
+            clock.tick(60)
             events = pygame.event.get()
             keys = pygame.key.get_pressed()
             self.handle_events(events, keys)
@@ -45,7 +46,6 @@ class App:
                 self.current_screen.makeCurrent()
 
             pygame.display.flip()
-            clock.tick(60)
 
     def handle_events(self, events: list[Event], keys):
         for event in events:
