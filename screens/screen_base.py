@@ -3,8 +3,11 @@ from abc import ABC, abstractmethod
 import sys
 
 sys.path.append("../")
+from assets.assets_loader import Assets
 from ui_components.ui_component import UIComponent
 
+
+# TODO maybe it can be moved somewhere else eg. constants.py so it can be used everywhere (assets manager)
 MAIN_MENU = "main_menu_screen"
 PLAY = "play_screen"
 OPTIONS = "options_screen"
@@ -12,6 +15,7 @@ GAME = "game_screen"
 
 
 class ScreenBase(ABC):
+    # TODO the title is useless i guess
     def __init__(
         self,
         title: str,
@@ -38,7 +42,7 @@ class ScreenBase(ABC):
         self.background = UIComponent(
             (0, 0),
             (width, height),
-            pygame.image.load(f"assets/backgrounds/{self.screenName}.png"),
+            Assets.get_background(screenName),
         )
 
     @abstractmethod
