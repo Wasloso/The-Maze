@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import sys
 
 sys.path.append("../")
-from assets.assets_loader import Assets
+from assets.assets_loader import AssetsLoader
 from ui_components.ui_component import UIComponent
 
 
@@ -42,7 +42,7 @@ class ScreenBase(ABC):
         self.background = UIComponent(
             (0, 0),
             (width, height),
-            Assets.get_background(screenName),
+            AssetsLoader.get_background(screenName),
         )
 
     @abstractmethod
