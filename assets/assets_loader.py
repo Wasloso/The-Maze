@@ -71,3 +71,7 @@ class AssetsLoader:
     @classmethod
     def get_objective(cls) -> Surface:
         return load(cls.paths["objective"])
+
+    @classmethod
+    def get_cell(cls, name) -> Surface:
+        return cls.get_image("maze", name)
