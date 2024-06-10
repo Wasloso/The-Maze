@@ -21,7 +21,6 @@ class Player(pygame.sprite.Sprite):
                 image, self.image.get_size(), dest_surface=self.image
             )
         self.rect = self.image.get_rect()
-        print(self.rect)
         self.rect.center = start_position
         self.velocity = velocity
         self.directions = {
