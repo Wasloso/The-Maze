@@ -44,7 +44,7 @@ class AssetsLoader:
     def get_image(category: str, name: str) -> Surface:
         try:
             path = AssetsLoader.paths[category][name]
-            return load(path)
+            return load(path).convert()
         except KeyError:
             print(f"Image {name} not found in category {category}.")
             return load(os.path.join(AssetsLoader._dir, "missing.png"))
