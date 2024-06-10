@@ -1,62 +1,56 @@
-import pygame
-from pygame.event import Event
-from screens import *
-from screens.screen_base import *
-from maze import Maze
 import json
+import sys
+from typing import Optional
+
+import pygame.key
+from pygame.event import Event
+
+from maze import Maze
+from screens import MainMenu
+from screens.screen_base import *
+from screens.screen_manager import ScreenManager
 
 
 class App:
-    def __init__(self, width=1280, heigth=800) -> None:
+    screen_manager: ScreenManager = None
+    screen = None
+
+    def __init__(self, width: int = 1280, height: int = 800) -> None:
+        self.width: int = width
+        self.height: int = height
+
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption("The Maze")
-        self.width = width
-        self.heigth = heigth
-        self.screen = pygame.display.set_mode((self.width, self.heigth))
-        self.screens: dict[str, ScreenBase] = {
-            MAIN_MENU: MainMenu("Main Menu", self.width, self.heigth),
-            PLAY: PlayScreen("Play", self.width, self.heigth),
-            OPTIONS: OptionsScreen("Options", self.width, self.heigth),
-            CREDITS: CreditsScreen("Credits", self.width, self.heigth),
-            GAME: None,
-        }
-        self.current_screen = self.screens[MAIN_MENU]
-        self.current_screen.makeCurrent()
 
     def run(self) -> None:
+        # Initializing display and necessary screens
+        screen_manager = ScreenManager()
+
+        screen = pygame.display.set_mode((self.width, self.height))
+        screen_manager.current_screen = MainMenu(self.width, self.height, screen, manager=screen_manager)
 
         clock = pygame.time.Clock()
-        self.running = True
-        file = open("data/saved_mazes.json", "r")
-        data = json.load(file)
-        maze = Maze.from_json(data["Spiral"])
 
-        while self.running:
-            events = pygame.event.get()
-            keys = pygame.key.get_pressed()
-            self.handle_events(events, keys)
-            if self.current_screen.done:
-                if self.current_screen.next_screen == GAME:
-                    self.screens[GAME] = GameScreen(
-                        "Game", self.width, self.heigth, maze
-                    )
-                if not self.current_screen.next_screen:
-                    # its stupid but it works (check main_menu.py exit_button)
+        # TODO: Loading a maze shouldn't be done here.
+        #  User should have the option to choose maze to load when pressing the play button
+        # file = open("data/saved_mazes.json", "r")
+        # data = json.load(file)
+        # maze = Maze.from_json(data["Spiral"])
+
+        while True:
+            events, keys = pygame.event.get(), pygame.key.get_pressed()
+
+            for event in events:
+                if event.type == pygame.QUIT:
                     pygame.quit()
-                    break
-                self.current_screen = self.screens[self.current_screen.next_screen]
-                self.current_screen.makeCurrent()
-            clock.tick(60)
+                    sys.exit()
+
+            screen_manager.update(events, keys)
+            screen_manager.draw(screen)
+
             pygame.display.flip()
-
-    def handle_events(self, events: list[Event], keys):
-        for event in events:
-            if event.type == pygame.QUIT:
-                self.running = False
-        self.current_screen.update(events, keys)
-        self.current_screen.draw(self.screen)
-
+            clock.tick(60)
 
 if __name__ == "__main__":
     app = App()

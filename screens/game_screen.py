@@ -1,6 +1,6 @@
 import sys
+
 from pygame.surface import Surface
-import pygame
 
 sys.path.append("../")
 
@@ -9,7 +9,6 @@ from maze.maze import Maze
 from maze.player import Player
 from maze.objective import Objective
 from ui_components.button import Button
-from ui_components.ui_component import UIComponent
 from assets.assets_loader import AssetsLoader
 
 
