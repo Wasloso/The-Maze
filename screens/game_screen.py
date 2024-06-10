@@ -9,6 +9,8 @@ from maze.maze import Maze
 from maze.player import Player
 from maze.objective import Objective
 from ui_components.button import Button
+from ui_components.ui_component import UIComponent
+from assets.assets_loader import AssetsLoader
 
 
 class GameScreen(ScreenBase):
@@ -35,10 +37,18 @@ class GameScreen(ScreenBase):
             lambda: self.change_screen(MAIN_MENU),
             # TODO: change to play screen when implemented
         )
+        self.cells = [cell for row in self.maze.grid for cell in row]
+        self.collidable_cells = [cell.rect for cell in self.cells if cell.collidable]
+        self.wallImage = AssetsLoader.get_cell("wall")
+        self.floorImage = AssetsLoader.get_cell("floor")
 
     def draw(self, screen: Surface) -> None:
         # super().draw(screen) - renderowanie tla bardzo obniza fps
-        self.maze.draw(screen)
+        for cell in self.cells:
+            if cell.collidable:
+                screen.blit(self.wallImage, cell.rect)
+            else:
+                screen.blit(self.floorImage, cell.rect)
         self.player.draw(screen)
         self.objective.draw(screen)
         self.back_button.draw(screen)
@@ -66,7 +76,7 @@ class GameScreen(ScreenBase):
     def move_player(self, direction, multiplier=1):
         print(direction)
         new_rect = self.player.try_move(direction, multiplier)
-        if not self.maze.check_collision(new_rect):
+        if new_rect.collidelist(self.collidable_cells) == -1:
             self.player.rect = new_rect
 
     def makeCurrent(self) -> None:

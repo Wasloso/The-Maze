@@ -18,43 +18,27 @@ class Maze:
         self.rows: int = rows
         self.columns: int = columns
         self.cell_size: int = cell_size
-        self.collidable_cells: list[Cell] = []
         self.player_start = player_start
         self.objective_position = objective_position
         self.grid: list[list[Cell]] = None
 
     def create_grid(self) -> list[list[Cell]]:
         grid = []
-        self.collidable_cells.clear()
         for y in range(self.columns):
             row = []
             for x in range(self.rows):
                 cell = Cell(
                     self.cell_size, x * self.cell_size, y * self.cell_size, True
                 )
-                self.collidable_cells.append(cell)
                 row.append(cell)
             grid.append(row)
         return grid
 
-    def draw(self, screen: Surface):
-        for row in self.grid:
-            for cell in row:
-                cell.draw(screen)
-
-    def check_collision(self, rect):
-        for cell in self.collidable_cells:
-            if cell.rect.colliderect(rect):
-                return True
-        return False
-
     def randomize_maze(self):
-        self.collidable_cells.clear()
         for row in self.grid:
             for cell in row:
                 if random.random() < 0.2:
                     cell.change_collidable(True)
-                    self.collidable_cells.append(cell)
 
     def __repr__(self):
         return f"Maze({self.grid=}, {self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=})"
@@ -103,7 +87,6 @@ class Maze:
                         maze.cell_size, i * maze.cell_size, j * maze.cell_size, True
                     )
                     maze_row.append(cell)
-                    maze.collidable_cells.append(cell)
                 else:
                     if cell == "P":
                         maze.player_start = maze.set_rect_position(j, i)
