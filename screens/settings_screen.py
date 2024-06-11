@@ -6,16 +6,23 @@ import sys
 
 sys.path.append("../")
 from ui_components.volume_controller import VolumeController
+from ui_components.ui_component import UIComponent
 
 
-class OptionsScreen(ScreenBase):
+class SettingsScreen(ScreenBase):
     def __init__(self, previous_screen: Optional[ScreenBase], manager) -> None:
-        super().__init__(previous_screen, manager, screen_name=OPTIONS)
+        super().__init__(previous_screen, manager, screen_name=SETTINGS)
         self.volumeController = VolumeController((100, 0), (100, 100))
+        self.title = UIComponent(
+            image=AssetsLoader.get_button("settings_button"),
+            desiredSize=(550, 100),
+            position=(400, 50),
+        )
+
         self.back_button = Button.go_back_button(
             position=(50, 50), callback=lambda: manager.back(previous_screen)
         )
-        self.components = pygame.sprite.Group(self.volumeController)
+        self.components = pygame.sprite.Group(self.volumeController, self.title)
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)

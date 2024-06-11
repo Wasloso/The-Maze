@@ -19,8 +19,9 @@ class AssetsLoader:
                 _backgroundDir,
                 "maze_selection_screen.jpg",  # FIXME: Change to png when final background is ready
             ),
-            "options_screen": os.path.join(_backgroundDir, "options_screen.png"),
+            "settings_screen": os.path.join(_backgroundDir, "settings_screen.png"),
             "game_screen": os.path.join(_backgroundDir, "game_screen.png"),
+            "credits_screen": os.path.join(_backgroundDir, "credits_screen.png"),
         },
         "button": {
             "play_button": os.path.join(_buttonDir, "play_button.png"),

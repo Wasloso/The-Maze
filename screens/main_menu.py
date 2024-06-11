@@ -72,6 +72,3 @@ class MainMenu(ScreenBase):
     def update(self, events, keys) -> None:
         for event in events:
             self.buttons.update(event)
-
-    def open_options(self):
-        super().change_screen(OPTIONS, self.screen_surface)

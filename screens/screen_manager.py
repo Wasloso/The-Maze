@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from . import GameScreen, CreditsScreen, OptionsScreen, MazeSelectionScreen
+from . import GameScreen, CreditsScreen, SettingsScreen, MazeSelectionScreen
 
 
 class ScreenManager:
@@ -29,7 +29,7 @@ class ScreenManager:
         self.current_screen = CreditsScreen(previous_screen, manager)
 
     def options(self, previous_screen, manager):
-        self.current_screen = OptionsScreen(previous_screen, manager)
+        self.current_screen = SettingsScreen(previous_screen, manager)
 
     def back(self, previous_screen):
         if previous_screen:
