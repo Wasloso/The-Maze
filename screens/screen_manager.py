@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from . import GameScreen, CreditsScreen, OptionsScreen
+from . import GameScreen, CreditsScreen, OptionsScreen, MazeSelectionScreen
 
 
 class ScreenManager:
@@ -18,6 +18,9 @@ class ScreenManager:
 
     def load_screen(self, screen):
         self.current_screen = screen
+
+    def maze_selection(self, previous_screen, manager):
+        self.current_screen = MazeSelectionScreen(previous_screen, manager)
 
     def start_game(self, previous_screen, manager, maze, ai=False):
         self.current_screen = GameScreen(previous_screen, manager, maze, ai)

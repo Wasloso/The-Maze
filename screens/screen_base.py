@@ -10,10 +10,10 @@ from ui_components.ui_component import UIComponent
 
 # TODO maybe it can be moved somewhere else eg. constants.py so it can be used everywhere (assets manager)
 MAIN_MENU = "main_menu_screen"
-PLAY = "play_screen"
 OPTIONS = "options_screen"
 GAME = "game_screen"
 CREDITS = "credits_screen"
+MAZE_SELECTION = "maze_selection_screen"
 
 
 class ScreenBase(ABC):
