@@ -25,34 +25,40 @@ class MainMenu(ScreenBase):
         #  User should have the option to choose maze to load when pressing the play button
         data = json.load(file)
         from maze import Maze
+
         maze = Maze.from_json(data["Spiral"])
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
+            altImage=AssetsLoader.get_button("play_button", hovered=True),
+            desiredSize=(300, 100),
             position=(self.width // 2, self.height // 2 - 50),
             callback=lambda: self.manager.start_game(self, self.manager, maze),
         )
         self.settings_button = Button(
             image=AssetsLoader.get_button("setting_button"),
+            altImage=AssetsLoader.get_button("setting_button", hovered=True),
+            desiredSize=(450, 100),
             position=(self.width // 2, self.height // 2 + 100),
             callback=lambda: self.manager.options(self, self.manager),
-            altImage=alt,
         )
-        self.exit_button = Button(
-            image=AssetsLoader.get_button("exit_button"),
+        self.quit_button = Button(
+            image=AssetsLoader.get_button("quit_button"),
+            altImage=AssetsLoader.get_button("quit_button", hovered=True),
+            desiredSize=(150, 50),
             position=(150, self.height - 100),
-            altImage=alt,
             callback=lambda: self.manager.back(None),
         )
         self.credits_button = Button(
             image=AssetsLoader.get_button("credits_button"),
+            altImage=AssetsLoader.get_button("credits_button", hovered=True),
+            desiredSize=(225, 50),
             position=(self.width - 150, self.height - 100),
-            altImage=alt,
             callback=lambda: self.manager.credits(self, self.manager),
         )
         self.buttons: Group[Button] = pygame.sprite.Group(
             self.play_button,
             self.settings_button,
-            self.exit_button,
+            self.quit_button,
             self.credits_button,
         )
         self.selected_maze = None

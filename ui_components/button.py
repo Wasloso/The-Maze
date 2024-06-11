@@ -41,18 +41,12 @@ class Button(UIComponent):
     def go_back_button(
         position: tuple[int, int],
         callback: callable,
-        desiredSize=(200, 100),
-        image=None,
-        altImage=None,
+        desiredSize=(100, 100),
     ) -> Sprite:
         return Button(
             position,
-            AssetsLoader.get_button(
-                "back_button" if not (image and altImage) else image
-            ),
-            AssetsLoader.get_button(
-                "back_button_hovered" if not (image and altImage) else image
-            ),
+            AssetsLoader.get_button("back_button"),
+            AssetsLoader.get_button("back_button", hovered=True),
             callback,
             desiredSize,
         )

@@ -10,6 +10,7 @@ class AssetsLoader:
     _buttonDir = os.path.join(_dir, "buttons")
     _playerDir = os.path.join(_dir, "player")
     _mazeDir = os.path.join(_dir, "maze")
+    _objectiveDir = os.path.join(_dir, "objective")
 
     paths = {
         "background": {
@@ -30,7 +31,7 @@ class AssetsLoader:
             "back_button": os.path.join(_buttonDir, "back_button.png"),
             "back_button_hovered": os.path.join(_buttonDir, "back_button_hovered.png"),
             "credits_button": os.path.join(_buttonDir, "credits_button.png"),
-            "credits_button_hobered": os.path.join(
+            "credits_button_hovered": os.path.join(
                 _buttonDir, "credits_button_hovered.png"
             ),
         },
@@ -42,8 +43,8 @@ class AssetsLoader:
             "walk_RIGHT": os.path.join(_playerDir, "walk_RIGHT.png"),
         },
         "objective": {
-            "objective": os.path.join(_playerDir, "objective.png"),
-            "objective_reached": os.path.join(_playerDir, "objective_reached.png"),
+            "objective": os.path.join(_objectiveDir, "objective.png"),
+            "objective_reached": os.path.join(_objectiveDir, "objective_reached.png"),
         },
         "maze": {
             "wall": os.path.join(_mazeDir, "wall.png"),
@@ -55,7 +56,7 @@ class AssetsLoader:
     def get_image(category: str, name: str) -> Surface:
         try:
             path = AssetsLoader.paths[category][name]
-            return load(path).convert()
+            return load(path).convert_alpha()
         except KeyError:
             print(f"Image {name} not found in category {category}.")
             return load(os.path.join(AssetsLoader._dir, "missing.png"))
@@ -81,8 +82,9 @@ class AssetsLoader:
         return cls.get_image("maze", name)
 
     @classmethod
-    def get_objective(cls) -> Surface:
-        return load(cls.paths["objective"])
+    def get_objective(cls, reached: bool = False) -> Surface:
+        name = "objective_reached" if reached else "objective"
+        return cls.get_image("objective", name)
 
     @classmethod
     def get_cell(cls, name) -> Surface:

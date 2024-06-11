@@ -12,7 +12,9 @@ from assets.assets_loader import AssetsLoader
 class CreditsScreen(ScreenBase):
     def __init__(self, previous_screen: Optional[ScreenBase], manager) -> None:
         super().__init__(previous_screen, manager, screen_name=CREDITS)
-        self.back_button = Button.go_back_button((0, 0), lambda: self.manager.back(previous_screen))
+        self.back_button = Button.go_back_button(
+            position=(50, 50), callback=lambda: self.manager.back(previous_screen)
+        )
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)

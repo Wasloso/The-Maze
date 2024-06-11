@@ -5,24 +5,33 @@ from maze.objective import Objective
 from maze.player import Player
 from screens.screen_base import *
 from ui_components.button import Button
+from assets.assets_loader import AssetsLoader
 
 
 class GameScreen(ScreenBase):
-    def __init__(self, previous_screen: Optional[ScreenBase], manager, maze: Maze, ai: bool = False) -> None:
+    def __init__(
+        self,
+        previous_screen: Optional[ScreenBase],
+        manager,
+        maze: Maze,
+        ai: bool = False,
+    ) -> None:
         super().__init__(previous_screen, manager, GAME)
         self.maze = maze
         self.ai = ai
 
         # player_img = pygame.image.load("assets/player.png")
+        playerImg = AssetsLoader.get_player("idle" if not ai else "idle_ai")
         self.player = Player(
-            self.maze.player_start, 2, size=self.maze.cell_size // 3, image=None
+            self.maze.player_start, 2, size=self.maze.cell_size // 3, image=playerImg
         )
         self.objective = Objective(
-            self.maze.objective_position, size=self.maze.cell_size // 3
+            self.maze.objective_position, size=self.maze.cell_size // 2
         )
         self.back_button = Button.go_back_button(
-            (0, 0),
-            lambda: self.manager.back(previous_screen),
+            position=(25, 25),
+            desiredSize=(50, 50),
+            callback=lambda: self.manager.back(previous_screen),
             # TODO: change to play screen when implemented
         )
         self.cells = [cell for row in self.maze.grid for cell in row]
@@ -46,8 +55,8 @@ class GameScreen(ScreenBase):
             self.back_button.update(event)
         self.handle_buttons_click(keys)
         if self.objective.check_collision(self.player.rect):
-            self.done = True
-            self.next_screen = MAIN_MENU
+            # TODO: Implement win screen
+            pass
 
     def handle_buttons_click(self, keys):
         multiplier = 2 if keys[pygame.K_LSHIFT] else 1

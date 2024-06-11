@@ -13,7 +13,7 @@ class OptionsScreen(ScreenBase):
         super().__init__(previous_screen, manager, screen_name=OPTIONS)
         self.volumeController = VolumeController((100, 0), (100, 100))
         self.back_button = Button.go_back_button(
-            (0, 0), lambda: manager.back(previous_screen)
+            position=(50, 50), callback=lambda: manager.back(previous_screen)
         )
         self.components = pygame.sprite.Group(self.volumeController)
 

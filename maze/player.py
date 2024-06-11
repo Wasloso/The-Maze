@@ -1,4 +1,5 @@
 import pygame
+from pygame.surface import Surface
 
 
 class Player(pygame.sprite.Sprite):
@@ -6,20 +7,11 @@ class Player(pygame.sprite.Sprite):
         self,
         start_position: tuple[int, int],
         velocity: float,
-        size: int = 15,
         image: pygame.Surface = None,
+        size: int = 15,
     ):
         super().__init__()
-        if image is None:
-            self.image = pygame.Surface((size, size))
-            self.image.fill((255, 255, 255))
-        else:
-            # TODO jak to zrobic zeby ladnie dopasowywalo kolizje do obrazka kiedy ma przezroczystosc
-            image = image.convert()
-            self.image: pygame.Surface = pygame.Surface((30, 30), pygame.SRCALPHA)
-            pygame.transform.scale(
-                image, self.image.get_size(), dest_surface=self.image
-            )
+        self.image = pygame.transform.scale(image, (size, size))
         self.rect = self.image.get_rect()
         self.rect.center = start_position
         self.velocity = velocity
@@ -44,5 +36,5 @@ class Player(pygame.sprite.Sprite):
         new_rect.y += y * self.velocity * multiplier
         return new_rect
 
-    def draw(self, screen):
+    def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)
