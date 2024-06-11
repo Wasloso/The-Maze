@@ -45,7 +45,6 @@ bla bla bla descripton
 # TO BE FIXED
 - Buttons
     - can't create a sprites.group() as the draw() method doesnt work properly
-- How to make quit button that doesn't give an error (well at least it closes the game)
 
 
 

@@ -20,11 +20,19 @@ class AssetsLoader:
         },
         "button": {
             "play_button": os.path.join(_buttonDir, "play_button.png"),
+            "play_button_hovered": os.path.join(_buttonDir, "play_button_hovered.png"),
             "settings_button": os.path.join(_buttonDir, "settings_button.png"),
-            "exit_button": os.path.join(_buttonDir, "exit_button.png"),
+            "settings_button_hovered": os.path.join(
+                _buttonDir, "settings_button_hovered.png"
+            ),
+            "quit_button": os.path.join(_buttonDir, "quit_button.png"),
+            "quit_button_hovered": os.path.join(_buttonDir, "quit_button_hovered.png"),
             "back_button": os.path.join(_buttonDir, "back_button.png"),
+            "back_button_hovered": os.path.join(_buttonDir, "back_button_hovered.png"),
             "credits_button": os.path.join(_buttonDir, "credits_button.png"),
-            "back_button": os.path.join(_buttonDir, "back_button.png"),
+            "credits_button_hobered": os.path.join(
+                _buttonDir, "credits_button_hovered.png"
+            ),
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
@@ -33,7 +41,10 @@ class AssetsLoader:
             "walk_LEFT": os.path.join(_playerDir, "walk_LEFT.png"),
             "walk_RIGHT": os.path.join(_playerDir, "walk_RIGHT.png"),
         },
-        "objective": os.path.join(_dir, "objective.png"),
+        "objective": {
+            "objective": os.path.join(_playerDir, "objective.png"),
+            "objective_reached": os.path.join(_playerDir, "objective_reached.png"),
+        },
         "maze": {
             "wall": os.path.join(_mazeDir, "wall.png"),
             "floor": os.path.join(_mazeDir, "floor.png"),
@@ -57,7 +68,8 @@ class AssetsLoader:
         return cls.get_image("background", name)
 
     @classmethod
-    def get_button(cls, name: str) -> Surface:
+    def get_button(cls, name: str, hovered: bool = False) -> Surface:
+        name = name + "_hovered" if hovered else name
         return cls.get_image("button", name)
 
     @classmethod
