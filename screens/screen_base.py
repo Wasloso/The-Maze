@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from typing import Optional
 
 import pygame
 
@@ -14,39 +17,13 @@ CREDITS = "credits_screen"
 
 
 class ScreenBase(ABC):
-    def __init__(
-            self,
-            width: int,
-            height: int,
-            manager,
-            screenName: str = MAIN_MENU,
-            previous=MAIN_MENU,
-    ) -> None:
-        """
-        Screen class which is base for all screens in the app.
-        :param width: Width of the screen
-        :param height: Height of the screen
-        :param previous: Name of the previous screen
-        :param backgroundImage: Background image of the screen, if None, screen will be black
-        """
-        self.screenName = screenName
-        self.height: int = height
-        self.width: int = width
+    def __init__(self, previous_screen: Optional[ScreenBase], manager, screen_name: str = MAIN_MENU) -> None:
+        self.previous_screen = previous_screen
+        self.screen_name = screen_name
         self.manager = manager
 
-        self.done: bool = False
-        self.next_screen: str = None
-        self.previous = previous
-        self.background = UIComponent(
-            (0, 0),
-            (width, height),
-            AssetsLoader.get_background(screenName),
-        )
-
-    @abstractmethod
-    def draw(self, screen: pygame.Surface) -> None:
-        UIComponent((0, 0), screen.get_size(), )
-        self.background.draw(screen)
+    def draw(self, surface: pygame.Surface) -> None:
+        UIComponent((0, 0), surface.get_size(), AssetsLoader.get_background(self.screen_name)).draw(surface)
 
     @abstractmethod
     def update(self, events: list, keys) -> None:

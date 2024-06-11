@@ -1,29 +1,18 @@
-import sys
-
 from pygame.surface import Surface
 
-sys.path.append("../")
-
-from screens.screen_base import *
 from maze.maze import Maze
-from maze.player import Player
 from maze.objective import Objective
+from maze.player import Player
+from screens.screen_base import *
 from ui_components.button import Button
-from assets.assets_loader import AssetsLoader
 
 
 class GameScreen(ScreenBase):
-    def __init__(
-        self,
-        title: str,
-        width: int,
-        height: int,
-        maze: Maze,
-        ai: bool = False,
-    ) -> None:
-        super().__init__(title, width, height)
+    def __init__(self, previous_screen: Optional[ScreenBase], manager, maze: Maze, ai: bool = False) -> None:
+        super().__init__(previous_screen, manager, GAME)
         self.maze = maze
         self.ai = ai
+
         # player_img = pygame.image.load("assets/player.png")
         self.player = Player(
             self.maze.player_start, 2, size=self.maze.cell_size // 3, image=None
@@ -33,7 +22,7 @@ class GameScreen(ScreenBase):
         )
         self.back_button = Button.go_back_button(
             (0, 0),
-            lambda: self.change_screen(MAIN_MENU),
+            lambda: self.manager.back(previous_screen),
             # TODO: change to play screen when implemented
         )
         self.cells = [cell for row in self.maze.grid for cell in row]
@@ -41,16 +30,16 @@ class GameScreen(ScreenBase):
         self.wallImage = AssetsLoader.get_cell("wall")
         self.floorImage = AssetsLoader.get_cell("floor")
 
-    def draw(self, screen: Surface) -> None:
+    def draw(self, surface: Surface) -> None:
         # super().draw(screen) - renderowanie tla bardzo obniza fps
         for cell in self.cells:
             if cell.collidable:
-                screen.blit(self.wallImage, cell.rect)
+                surface.blit(self.wallImage, cell.rect)
             else:
-                screen.blit(self.floorImage, cell.rect)
-        self.player.draw(screen)
-        self.objective.draw(screen)
-        self.back_button.draw(screen)
+                surface.blit(self.floorImage, cell.rect)
+        self.player.draw(surface)
+        self.objective.draw(surface)
+        self.back_button.draw(surface)
 
     def update(self, events: list, keys) -> None:
         for event in events:
@@ -75,6 +64,3 @@ class GameScreen(ScreenBase):
         new_rect = self.player.try_move(direction, multiplier)
         if new_rect.collidelist(self.collidable_cells) == -1:
             self.player.rect = new_rect
-
-    def makeCurrent(self) -> None:
-        pass
