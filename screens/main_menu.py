@@ -35,9 +35,9 @@ class MainMenu(ScreenBase):
             callback=lambda: self.manager.start_game(self, self.manager, maze),
         )
         self.settings_button = Button(
-            image=AssetsLoader.get_button("setting_button"),
-            altImage=AssetsLoader.get_button("setting_button", hovered=True),
-            desiredSize=(450, 100),
+            image=AssetsLoader.get_button("settings_button"),
+            altImage=AssetsLoader.get_button("settings_button", hovered=True),
+            desiredSize=(550, 100),
             position=(self.width // 2, self.height // 2 + 100),
             callback=lambda: self.manager.options(self, self.manager),
         )
