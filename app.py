@@ -27,12 +27,6 @@ class App:
 
         clock = pygame.time.Clock()
 
-        # FIXME: Loading a maze shouldn't be done here.
-        #  User should have the option to choose maze to load when pressing the play button
-        # file = open("data/saved_mazes.json", "r")
-        # data = json.load(file)
-        # maze = Maze.from_json(data["Spiral"])
-
         while True:
             events, keys = pygame.event.get(), pygame.key.get_pressed()
 
