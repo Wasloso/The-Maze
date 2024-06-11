@@ -1,14 +1,9 @@
-import json
 import sys
-from typing import Optional
 
 import pygame.key
 from pygame.event import Event
 
-from maze import Maze
-from screens import MainMenu
-from screens.screen_base import *
-from screens.screen_manager import ScreenManager
+from screens import MainMenu, ScreenManager
 
 
 class App:
@@ -27,12 +22,12 @@ class App:
         # Initializing display and necessary screens
         screen_manager = ScreenManager()
 
-        screen = pygame.display.set_mode((self.width, self.height))
-        screen_manager.current_screen = MainMenu(self.width, self.height, screen, manager=screen_manager)
+        surface = pygame.display.set_mode((self.width, self.height))
+        screen_manager.load_screen(MainMenu(screen_manager, surface))
 
         clock = pygame.time.Clock()
 
-        # TODO: Loading a maze shouldn't be done here.
+        # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button
         # file = open("data/saved_mazes.json", "r")
         # data = json.load(file)
@@ -47,11 +42,11 @@ class App:
                     sys.exit()
 
             screen_manager.update(events, keys)
-            screen_manager.draw(screen)
+            screen_manager.draw(surface)
 
             pygame.display.flip()
             clock.tick(60)
 
+
 if __name__ == "__main__":
-    app = App()
-    app.run()
+    App().run()
