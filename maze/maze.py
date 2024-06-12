@@ -14,6 +14,7 @@ class Maze:
         columns: int = 32,
         player_start: tuple[int, int] = None,
         objective_position: tuple[int, int] = None,
+        name: str = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -21,6 +22,7 @@ class Maze:
         self.player_start = player_start
         self.objective_position = objective_position
         self.grid: list[list[Cell]] = None
+        self.name = name
 
     def create_grid(self) -> list[list[Cell]]:
         grid = []
@@ -41,7 +43,7 @@ class Maze:
                     cell.change_collidable(True)
 
     def __repr__(self):
-        return f"Maze({self.grid=}, {self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=})"
+        return f"Maze({self.grid=}, {self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
 
     # TODO jakas fajna metoda generowania losowego labiryntu
     @staticmethod
@@ -77,7 +79,8 @@ class Maze:
         grid = json["grid"]
         columns = len(grid)
         rows = len(grid[0])
-        maze = Maze(json["cell_size"], rows, columns)
+        name = json["name"]
+        maze = Maze(json["cell_size"], rows, columns, name=name)
         maze.grid = []
         for j, row in enumerate(grid):
             maze_row = []
@@ -101,8 +104,39 @@ class Maze:
                         )
                     )
             maze.grid.append(maze_row)
-
         return maze
+
+    def to_json(self) -> dict:
+        player_pos = self.get_rect_pos_in_grid(*self.player_start)
+        objective_pos = self.get_rect_pos_in_grid(*self.objective_position)
+        print(player_pos, objective_pos)
+        grid = []
+        for row in self.grid:
+            grid_row = []
+            for cell in row:
+                if cell.collidable:
+                    grid_row.append(1)
+                elif (
+                    row.index(cell) == player_pos[0]
+                    and self.grid.index(row) == player_pos[1]
+                ):
+                    grid_row.append("P")
+                elif (
+                    row.index(cell) == objective_pos[0]
+                    and self.grid.index(row) == objective_pos[1]
+                ):
+                    grid_row.append("O")
+                else:
+                    grid_row.append(0)
+            grid.append(grid_row)
+        return {
+            "name": self.name,
+            "cell_size": self.cell_size,
+            "grid": grid,
+        }
+
+    def get_rect_pos_in_grid(self, x, y):
+        return x // self.cell_size, y // self.cell_size
 
     def set_rect_position(self, row, column):
         return (
