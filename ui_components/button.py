@@ -26,8 +26,12 @@ class Button(UIComponent):
         self.displayImage = self.image
         self.callback = callback
 
-    def draw(self, screen: pygame.Surface) -> None:
-        screen.blit(self.displayImage, self.rect)
+    def draw(self, screen: pygame.Surface, position: tuple[int, int] = None) -> None:
+        if not position:
+            position = self.rect
+        elif position != self.rect:
+            self.rect.topleft = position
+        screen.blit(self.displayImage, position)
 
     def update(self, event: pygame.event.Event) -> None:
         hovered = self.check_hovered()
@@ -36,9 +40,6 @@ class Button(UIComponent):
         )
         if event.type == pygame.MOUSEBUTTONDOWN and hovered and self.callback:
             self.callback()
-
-    def set_position(self, position: tuple[int, int]) -> None:
-        self.rect.center = position
 
     @staticmethod
     def go_back_button(
