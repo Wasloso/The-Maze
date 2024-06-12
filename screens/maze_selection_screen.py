@@ -29,10 +29,7 @@ class MazeSelectionScreen(ScreenBase):
         super().draw(surface)
         self.back_button.draw(surface)
         for i, button in enumerate(self.buttons):
-            button.set_position(
-                (surface.get_width() // 2, surface.get_height() // 2 + i * 150)
-            )
-            button.draw(surface)
+            button.draw(surface, (50, 150 + i * 150))
 
     def update(self, events, keys) -> None:
         super().update(events, keys)
