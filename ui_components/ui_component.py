@@ -13,24 +13,26 @@ from pygame import mouse
 class UIComponent(Sprite):
     def __init__(
         self,
-        position: tuple[int, int],
-        desiredSize: tuple[int, int],
+        position: tuple[int, int] = (0, 0),
+        desiredSize: tuple[int, int] = None,
         image: Surface = None,
         fill: tuple[int, int, int] = (0, 0, 0),
     ) -> None:
         super().__init__()
         if not image:
-            self.image = Surface(desiredSize)
+            self.image = Surface(10, 10)
             self.image.fill(fill)
-        else:
+        elif desiredSize:
             self.image = scale(image, desiredSize)
+        else:
+            self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = position
 
     def draw(self, screen: Surface, position: tuple[int, int] = None) -> None:
         if not position:
             position = self.rect
-        if position != self.rect:
+        else:
             self.rect.topleft = position
         screen.blit(self.image, position)
 
