@@ -11,7 +11,7 @@ from assets.assets_loader import AssetsLoader
 class Button(UIComponent):
     def __init__(
         self,
-        position: tuple[int, int],
+        position: tuple[int, int] = (0, 0),
         image: pygame.Surface = None,
         altImage: pygame.Surface = None,
         callback: callable = None,
@@ -36,6 +36,9 @@ class Button(UIComponent):
         )
         if event.type == pygame.MOUSEBUTTONDOWN and hovered and self.callback:
             self.callback()
+
+    def set_position(self, position: tuple[int, int]) -> None:
+        self.rect.center = position
 
     @staticmethod
     def go_back_button(
