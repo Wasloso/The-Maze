@@ -27,8 +27,12 @@ class UIComponent(Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = position
 
-    def draw(self, screen: Surface) -> None:
-        screen.blit(self.image, self.rect)
+    def draw(self, screen: Surface, position: tuple[int, int] = None) -> None:
+        if not position:
+            position = self.rect
+        if position != self.rect:
+            self.rect.topleft = position
+        screen.blit(self.image, position)
 
     def update(self, event: Event) -> None:
         pass
