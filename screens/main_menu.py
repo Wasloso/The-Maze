@@ -24,9 +24,7 @@ class MainMenu(ScreenBase):
         # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button
         data = json.load(file)
-        from maze import Maze
 
-        maze = Maze.from_json(data["Spiral"])
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
             altImage=AssetsLoader.get_button("play_button", hovered=True),
