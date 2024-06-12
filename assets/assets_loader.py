@@ -11,6 +11,7 @@ class AssetsLoader:
     _playerDir = os.path.join(_dir, "player")
     _mazeDir = os.path.join(_dir, "maze")
     _objectiveDir = os.path.join(_dir, "objective")
+    _textDir = os.path.join(_dir, "text")
 
     paths = {
         "background": {
@@ -54,6 +55,9 @@ class AssetsLoader:
             "wall": os.path.join(_mazeDir, "wall.png"),
             "floor": os.path.join(_mazeDir, "floor.png"),
         },
+        "text": {
+            "the_maze": os.path.join(_textDir, "the_maze.png"),
+        },
     }
 
     @staticmethod
@@ -93,3 +97,7 @@ class AssetsLoader:
     @classmethod
     def get_cell(cls, name) -> Surface:
         return cls.get_image("maze", name)
+
+    @classmethod
+    def get_text(cls, name) -> Surface:
+        return cls.get_image("text", name)

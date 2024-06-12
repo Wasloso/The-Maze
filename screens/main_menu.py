@@ -24,6 +24,7 @@ class MainMenu(ScreenBase):
         # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button
         data = json.load(file)
+        self.the_maze_text = UIComponent(image=AssetsLoader.get_text("the_maze"))
 
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
@@ -63,6 +64,9 @@ class MainMenu(ScreenBase):
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
+        self.the_maze_text.draw(
+            surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50)
+        )
         # TODO: z jakiegos powodu uzywanie self.buttons.draw sprawia ze one sie nie aktualizuja (readme)
         for button in self.buttons:
             button.draw(surface)
