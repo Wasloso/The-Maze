@@ -2,7 +2,7 @@ from .screen_base import *
 from pygame.surface import Surface
 from pygame import Surface
 from ui_components.button import Button
-from data.mazes_manager import MazesManager
+from data import MazeManager
 
 
 class MazeSelectionScreen(ScreenBase):
@@ -12,13 +12,13 @@ class MazeSelectionScreen(ScreenBase):
             position=(50, 50), callback=lambda: self.manager.back(previous_screen)
         )
         self.buttons: list[Button] = []
-        self.mazes = MazesManager().load_mazes()
+        self.mazes = MazeManager().load_mazes()
         for maze in self.mazes:
             self.buttons.append(
                 Button(
                     image=AssetsLoader.get_button("play_button"),
-                    altImage=AssetsLoader.get_button("play_button", hovered=True),
-                    desiredSize=(300, 100),
+                    alt_image=AssetsLoader.get_button("play_button", hovered=True),
+                    desired_size=(300, 100),
                     callback=lambda m=maze: self.manager.start_game(
                         self, self.manager, m
                     ),

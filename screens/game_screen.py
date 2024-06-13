@@ -21,19 +21,19 @@ class GameScreen(ScreenBase):
         super().__init__(previous_screen, manager, GAME)
         self.maze: Maze = maze
         self.ai: bool = ai
-        playerImg: Surface = AssetsLoader.get_player("idle" if not ai else "idle_ai")
+        player_img: Surface = AssetsLoader.get_player("idle" if not ai else "idle_ai")
         self.player: Player = Player(
             start_position=self.maze.player_start,
             velocity=2,
             size=self.maze.cell_size // 3,
-            image=playerImg,
+            image=player_img,
         )
         self.objective: Objective = Objective(
             position=self.maze.objective_position, size=self.maze.cell_size // 2
         )
         self.back_button: Button = Button.go_back_button(
             position=(25, 25),
-            desiredSize=(50, 50),
+            desired_size=(50, 50),
             callback=lambda: self.manager.back(previous_screen),
         )
         self.cells: list[Cell] = [cell for row in self.maze.grid for cell in row]
@@ -57,6 +57,7 @@ class GameScreen(ScreenBase):
     def update(self, events: list, keys: list) -> None:
         for event in events:
             self.back_button.update(event)
+        self.player.update(events, keys)
         self.handle_buttons_click(keys)
         if self.objective.check_collision(self.player.rect):
             # TODO: Implement win screen
@@ -77,6 +78,3 @@ class GameScreen(ScreenBase):
         new_rect: Rect = self.player.try_move(direction, multiplier)
         if new_rect.collidelist(self.collidable_cells) == -1:
             self.player.rect = new_rect
-
-
-1

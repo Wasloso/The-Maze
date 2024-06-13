@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         self,
         start_position: tuple[int, int],
         velocity: float,
-        image: pygame.Surface = None,
+        image: Surface = None,
         size: int = 15,
     ):
         super().__init__()
@@ -38,3 +38,11 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)
+
+    def update(self, events, keys):
+        ...
+
+    # def move_player(self, direction, multiplier=1) -> None:
+    #     new_rect = self.try_move(direction, multiplier)
+    #     if new_rect.collidelist(self.collidable_cells) == -1:
+    #         self.player.rect = new_rect

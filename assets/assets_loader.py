@@ -1,17 +1,18 @@
+from enum import Enum
+
 from pygame.image import load
 from pygame.surface import Surface
 import os
 
-
 # I think it can be done better
 class AssetsLoader:
-    _dir = "assets"
-    _backgroundDir = os.path.join(_dir, "backgrounds")
-    _buttonDir = os.path.join(_dir, "buttons")
-    _playerDir = os.path.join(_dir, "player")
-    _mazeDir = os.path.join(_dir, "maze")
-    _objectiveDir = os.path.join(_dir, "objective")
-    _textDir = os.path.join(_dir, "text")
+    _dir = 'assets'
+    _backgroundDir = os.path.join(_dir, 'backgrounds')
+    _buttonDir = os.path.join(_dir, 'buttons')
+    _playerDir = os.path.join(_dir, 'player')
+    _mazeDir = os.path.join(_dir, 'maze')
+    _objectiveDir = os.path.join(_dir, 'objective')
+    _textDir = os.path.join(_dir, 'text')
 
     paths = {
         "background": {
@@ -74,12 +75,11 @@ class AssetsLoader:
 
     @classmethod
     def get_background(cls, name: str) -> Surface:
-        return cls.get_image("background", name)
+        return cls.get_image('background', name)
 
     @classmethod
     def get_button(cls, name: str, hovered: bool = False) -> Surface:
-        name = name + "_hovered" if hovered else name
-        return cls.get_image("button", name)
+        return cls.get_image("button", name + "_hovered" if hovered else name)
 
     @classmethod
     def get_player(cls, name: str) -> Surface:

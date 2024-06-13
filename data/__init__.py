@@ -1,2 +1,1 @@
-from .file_loader import FileManager
-from .mazes_manager import MazesManager
+from .maze_manager import MazeManager

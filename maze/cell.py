@@ -1,5 +1,3 @@
-from pygame.sprite import Sprite
-from pygame import *
 from pygame.rect import Rect
 
 
@@ -10,7 +8,4 @@ class Cell:
         self.size = size
 
     def change_collidable(self, collidable=False) -> None:
-        if collidable:
-            self.collidable = collidable
-        else:
-            self.collidable = not self.collidable
+        self.collidable = collidable if collidable else not self.collidable

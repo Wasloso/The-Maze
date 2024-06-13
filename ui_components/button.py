@@ -1,3 +1,4 @@
+from __future__ import annotations
 import pygame
 from pygame.sprite import Sprite
 from pygame.font import Font
@@ -13,14 +14,14 @@ class Button(UIComponent):
         self,
         position: tuple[int, int] = (0, 0),
         image: pygame.Surface = None,
-        altImage: pygame.Surface = None,
+        alt_image: pygame.Surface = None,
         callback: callable = None,
-        desiredSize=(200, 100),
+        desired_size=(200, 100),
     ) -> None:
-        """Image is the main display image. Altimage appears when the button is hovered"""
-        super().__init__(position, desiredSize, image)
+        """Image is the main display image. alt_image appears when the button is hovered"""
+        super().__init__(position, desired_size, image)
         self.altImage = (
-            pygame.transform.scale(altImage, desiredSize) if altImage else None
+            pygame.transform.scale(alt_image, desired_size) if alt_image else None
         )
         self.rect.center = position
         self.displayImage = self.image
@@ -45,12 +46,12 @@ class Button(UIComponent):
     def go_back_button(
         position: tuple[int, int],
         callback: callable,
-        desiredSize=(100, 100),
-    ) -> Sprite:
+        desired_size=(100, 100),
+    ) -> Button:
         return Button(
             position,
             AssetsLoader.get_button("back_button"),
             AssetsLoader.get_button("back_button", hovered=True),
             callback,
-            desiredSize,
+            desired_size,
         )

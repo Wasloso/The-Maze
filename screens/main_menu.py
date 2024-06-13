@@ -2,12 +2,15 @@ import json
 
 from pygame import Surface
 
-from .screen_base import *
+from ui_components import UIComponent
+from . import ScreenBase
+
 import pygame
 from pygame.sprite import Group
 
 from ui_components.button import Button
 from assets.assets_loader import AssetsLoader
+from .screen_base import MAIN_MENU
 
 
 class MainMenu(ScreenBase):
@@ -20,6 +23,7 @@ class MainMenu(ScreenBase):
 
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
+
         file = open("data/saved_mazes.json", "r")
         # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button
@@ -28,29 +32,29 @@ class MainMenu(ScreenBase):
 
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
-            altImage=AssetsLoader.get_button("play_button", hovered=True),
-            desiredSize=(300, 100),
+            alt_image=AssetsLoader.get_button("play_button", hovered=True),
+            desired_size=(300, 100),
             position=(self.width // 2, self.height // 2 - 50),
             callback=lambda: self.manager.maze_selection(self, self.manager),
         )
         self.settings_button = Button(
             image=AssetsLoader.get_button("settings_button"),
-            altImage=AssetsLoader.get_button("settings_button", hovered=True),
-            desiredSize=(550, 100),
+            alt_image=AssetsLoader.get_button("settings_button", hovered=True),
+            desired_size=(550, 100),
             position=(self.width // 2, self.height // 2 + 100),
             callback=lambda: self.manager.options(self, self.manager),
         )
         self.quit_button = Button(
             image=AssetsLoader.get_button("quit_button"),
-            altImage=AssetsLoader.get_button("quit_button", hovered=True),
-            desiredSize=(150, 50),
+            alt_image=AssetsLoader.get_button("quit_button", hovered=True),
+            desired_size=(150, 50),
             position=(150, self.height - 100),
             callback=lambda: self.manager.back(None),
         )
         self.credits_button = Button(
             image=AssetsLoader.get_button("credits_button"),
-            altImage=AssetsLoader.get_button("credits_button", hovered=True),
-            desiredSize=(225, 50),
+            alt_image=AssetsLoader.get_button("credits_button", hovered=True),
+            desired_size=(225, 50),
             position=(self.width - 150, self.height - 100),
             callback=lambda: self.manager.credits(self, self.manager),
         )
@@ -60,7 +64,6 @@ class MainMenu(ScreenBase):
             self.quit_button,
             self.credits_button,
         )
-        self.selected_maze = None
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)

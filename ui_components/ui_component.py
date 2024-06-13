@@ -14,16 +14,16 @@ class UIComponent(Sprite):
     def __init__(
         self,
         position: tuple[int, int] = (0, 0),
-        desiredSize: tuple[int, int] = None,
+        desired_size: tuple[int, int] = None,
         image: Surface = None,
         fill: tuple[int, int, int] = (0, 0, 0),
     ) -> None:
         super().__init__()
         if not image:
-            self.image = Surface(10, 10)
+            self.image = Surface((10, 10))
             self.image.fill(fill)
-        elif desiredSize:
-            self.image = scale(image, desiredSize)
+        elif desired_size:
+            self.image = scale(image, desired_size)
         else:
             self.image = image
         self.rect = self.image.get_rect()
@@ -36,9 +36,5 @@ class UIComponent(Sprite):
             self.rect.topleft = position
         screen.blit(self.image, position)
 
-    def update(self, event: Event) -> None:
-        pass
-
     def check_hovered(self):
-        pos = mouse.get_pos()
-        return self.rect.collidepoint(pos)
+        return self.rect.collidepoint(mouse.get_pos())

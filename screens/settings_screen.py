@@ -15,7 +15,7 @@ class SettingsScreen(ScreenBase):
         self.volumeController = VolumeController((100, 0), (100, 100))
         self.title = UIComponent(
             image=AssetsLoader.get_button("settings_button"),
-            desiredSize=(550, 100),
+            desired_size=(550, 100),
             position=(400, 50),
         )
 

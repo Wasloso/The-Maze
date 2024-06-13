@@ -18,10 +18,10 @@ MAZE_SELECTION = "maze_selection_screen"
 
 class ScreenBase(ABC):
     def __init__(
-        self,
-        previous_screen: Optional[ScreenBase],
-        manager,
-        screen_name: str = MAIN_MENU,
+            self,
+            previous_screen: Optional[ScreenBase],
+            manager,
+            screen_name: str = MAIN_MENU,
     ) -> None:
         self.previous_screen = previous_screen  # TODO: we can get rid of this i guess
         self.screen_name = screen_name
