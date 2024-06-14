@@ -18,6 +18,10 @@ class VolumeController(UIComponent):
         image.fill((0, 0, 0, 0))
         super().__init__(position, desired_size, image)
         self.settings_manager: SettingsManager = settings_manager
+
+        self.volume_text = UIComponent(
+            image=AssetsLoader.get_text("Volume"), desired_size=(200, 50)
+        )
         self.volume_up_button = Button(
             image=AssetsLoader.get_button("volume_up_button"),
             alt_image=AssetsLoader.get_button("volume_up_button", hovered=True),
@@ -43,29 +47,43 @@ class VolumeController(UIComponent):
         self.muted_alt = AssetsLoader.get_button("muted_button", hovered=True)
         self.mute_button = Button(
             image=self.muted_image if settings_manager.mute else self.unmuted_image,
-            alt_image=self.unmuted_alt if settings_manager.mute else self.muted_alt,
-            desired_size=(50, 50),
+            alt_image=self.muted_alt if settings_manager.mute else self.unmuted_alt,
+            desired_size=(100, 100),
             callback=lambda: self.toggle_mute(),
         )
 
     def draw(self, screen: Surface, position: tuple[int, int] = None) -> None:
         super().draw(screen, position)
         # FIXME: adjust positions
-        self.volume_up_button.draw(
+        self.volume_text.draw(
             screen,
-            (self.rect.x + self.rect.width + 50, self.rect.y - self.rect.height // 2),
+            position=(
+                self.rect.x + self.rect.width // 2 - self.volume_text.rect.width // 2,
+                self.rect.y - self.volume_text.rect.height - 20,
+            ),
         )
         self.volume_down_button.draw(
-            screen, (self.rect.x - 50, self.rect.y - self.rect.height // 2)
+            screen,
+            (self.rect.x - 50, self.rect.y + 5),
+        )
+        self.volume_up_button.draw(
+            screen,
+            (
+                self.rect.x + self.rect.width + 30 - self.volume_down_button.rect.width,
+                self.rect.y + 5,
+            ),
         )
         for i, cell in enumerate(self.volume_cells):
-            if i < self.settings_manager.volume // 10:
+            if (
+                i < self.settings_manager.volume // 10
+                and not self.settings_manager.mute
+            ):
                 cell.change_image(self.active_cell_image)
             else:
                 cell.change_image(self.inactive_cell_image)
             cell.draw(
                 screen,
-                (self.rect.x + 50 * i, self.rect.y - self.rect.height // 2),
+                (self.rect.x + 50 * i, self.rect.y),
             )
 
         self.mute_button.draw(
@@ -88,4 +106,10 @@ class VolumeController(UIComponent):
         self.mute_button.change_image(
             self.muted_image if mute else self.unmuted_image,
             self.muted_alt if mute else self.unmuted_alt,
+        )
+        self.volume_down_button.callback = lambda: (
+            self.settings_manager.change_volume(False) if not mute else lambda: None
+        )
+        self.volume_up_button.callback = lambda: (
+            self.settings_manager.change_volume(True) if not mute else lambda: None
         )

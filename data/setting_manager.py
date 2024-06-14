@@ -14,6 +14,7 @@ class SettingsManager:
             self.settings = json.load(f)
             self.volume = self.settings["sound"]["volume"]
             self.mute = self.settings["sound"]["mute"]
+        self.set_game_volume()
 
     def save_settings(self):
         with open(self.path, "w") as f:
@@ -26,14 +27,14 @@ class SettingsManager:
         elif not increase and self.volume != 0:
             self.volume -= 10
         self.settings["sound"]["volume"] = self.volume
-        self._set_volume()
+        self.set_game_volume()
         return self.volume
 
     def toggle_mute(self) -> bool:
         self.mute = not self.mute
         self.settings["sound"]["mute"] = self.mute
-        self._set_volume()
+        self.set_game_volume()
         return self.mute
 
-    def _set_volume(self) -> None:
+    def set_game_volume(self) -> None:
         pygame.mixer.music.set_volume(0 if self.mute else self.volume / 100)
