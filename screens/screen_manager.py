@@ -2,11 +2,14 @@ import sys
 
 import pygame
 
-from . import GameScreen, CreditsScreen, SettingsScreen, MazeSelectionScreen
+from . import GameScreen, CreditsScreen, SettingsScreen, MazeSelectionScreen, ScreenBase
+from data import SettingsManager
 
 
 class ScreenManager:
-    current_screen = None
+    def __init__(self, settings_manager: SettingsManager):
+        self.current_screen: ScreenBase = None
+        self.settings_manager: SettingsManager = settings_manager
 
     def update(self, events, keys):
         if self.current_screen:
@@ -28,12 +31,15 @@ class ScreenManager:
     def credits(self, previous_screen, manager):
         self.current_screen = CreditsScreen(previous_screen, manager)
 
-    def options(self, previous_screen, manager):
-        self.current_screen = SettingsScreen(previous_screen, manager)
+    def settings(self, previous_screen, manager):
+        self.current_screen = SettingsScreen(
+            previous_screen, manager, self.settings_manager
+        )
 
     def back(self, previous_screen):
         if previous_screen:
             self.current_screen = previous_screen
         else:
+            self.settings_manager.save_settings()
             pygame.quit()
             sys.exit()

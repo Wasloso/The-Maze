@@ -42,7 +42,7 @@ class MainMenu(ScreenBase):
             alt_image=AssetsLoader.get_button("settings_button", hovered=True),
             desired_size=(550, 100),
             position=(self.width // 2, self.height // 2 + 100),
-            callback=lambda: self.manager.options(self, self.manager),
+            callback=lambda: self.manager.settings(self, self.manager),
         )
         self.quit_button = Button(
             image=AssetsLoader.get_button("quit_button"),

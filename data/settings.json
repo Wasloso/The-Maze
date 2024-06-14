@@ -1,10 +1,6 @@
 {
-    "Sound":{
-        "Volume": 100,
-        "Mute": false
-    },
-    "Graphics":{
-        "PlayerImage": "player.png",
-        "AiImage": "ai.png"
+    "sound": {
+        "volume": 0,
+        "mute": false
     }
 }

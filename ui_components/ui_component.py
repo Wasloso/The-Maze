@@ -19,8 +19,9 @@ class UIComponent(Sprite):
         fill: tuple[int, int, int] = (0, 0, 0),
     ) -> None:
         super().__init__()
+        self.desired_size = desired_size
         if not image:
-            self.image = Surface((10, 10))
+            self.image = Surface(desired_size if desired_size else (10, 10))
             self.image.fill(fill)
         elif desired_size:
             self.image = scale(image, desired_size)
@@ -38,3 +39,6 @@ class UIComponent(Sprite):
 
     def check_hovered(self):
         return self.rect.collidepoint(mouse.get_pos())
+
+    def change_image(self, image: Surface) -> None:
+        self.image = scale(image, self.desired_size)

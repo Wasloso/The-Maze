@@ -3,16 +3,19 @@ from enum import Enum
 from pygame.image import load
 from pygame.surface import Surface
 import os
+from functools import lru_cache
+
 
 # I think it can be done better
 class AssetsLoader:
-    _dir = 'assets'
-    _backgroundDir = os.path.join(_dir, 'backgrounds')
-    _buttonDir = os.path.join(_dir, 'buttons')
-    _playerDir = os.path.join(_dir, 'player')
-    _mazeDir = os.path.join(_dir, 'maze')
-    _objectiveDir = os.path.join(_dir, 'objective')
-    _textDir = os.path.join(_dir, 'text')
+    _dir = "assets"
+    _backgroundDir = os.path.join(_dir, "backgrounds")
+    _buttonDir = os.path.join(_dir, "buttons")
+    _playerDir = os.path.join(_dir, "player")
+    _mazeDir = os.path.join(_dir, "maze")
+    _objectiveDir = os.path.join(_dir, "objective")
+    _textDir = os.path.join(_dir, "text")
+    _volumeDir = os.path.join(_dir, "volume")
 
     paths = {
         "background": {
@@ -40,6 +43,22 @@ class AssetsLoader:
             "credits_button_hovered": os.path.join(
                 _buttonDir, "credits_button_hovered.png"
             ),
+            "muted_button": os.path.join(_buttonDir, "muted_button.png"),
+            "muted_button_hovered": os.path.join(
+                _buttonDir, "muted_button_hovered.png"
+            ),
+            "unmuted_button": os.path.join(_buttonDir, "unmuted_button.png"),
+            "unmuted_button_hovered": os.path.join(
+                _buttonDir, "unmuted_button_hovered.png"
+            ),
+            "volume_up_button": os.path.join(_buttonDir, "volume_up_button.png"),
+            "volume_up_button_hovered": os.path.join(
+                _buttonDir, "volume_up_button_hovered.png"
+            ),
+            "volume_down_button": os.path.join(_buttonDir, "volume_down_button.png"),
+            "volume_down_button_hovered": os.path.join(
+                _buttonDir, "volume_down_button_hovered.png"
+            ),
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
@@ -59,9 +78,14 @@ class AssetsLoader:
         "text": {
             "the_maze": os.path.join(_textDir, "the_maze.png"),
         },
+        "volume": {
+            "active": os.path.join(_volumeDir, "volume_cell_active.png"),
+            "inactive": os.path.join(_volumeDir, "volume_cell_inactive.png"),
+        },
     }
 
     @staticmethod
+    @lru_cache(maxsize=None)
     def get_image(category: str, name: str) -> Surface:
         try:
             path = AssetsLoader.paths[category][name]
@@ -75,7 +99,7 @@ class AssetsLoader:
 
     @classmethod
     def get_background(cls, name: str) -> Surface:
-        return cls.get_image('background', name)
+        return cls.get_image("background", name)
 
     @classmethod
     def get_button(cls, name: str, hovered: bool = False) -> Surface:
@@ -101,3 +125,8 @@ class AssetsLoader:
     @classmethod
     def get_text(cls, name) -> Surface:
         return cls.get_image("text", name)
+
+    @classmethod
+    def get_volume_cell(cls, active: bool) -> Surface:
+        name = "active" if active else "inactive"
+        return cls.get_image("volume", name)

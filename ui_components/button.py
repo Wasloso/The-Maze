@@ -20,6 +20,7 @@ class Button(UIComponent):
     ) -> None:
         """Image is the main display image. alt_image appears when the button is hovered"""
         super().__init__(position, desired_size, image)
+        self.desired_size = desired_size
         self.altImage = (
             pygame.transform.scale(alt_image, desired_size) if alt_image else None
         )
@@ -55,3 +56,11 @@ class Button(UIComponent):
             callback,
             desired_size,
         )
+
+    def change_image(
+        self, image: pygame.Surface = None, alt_image: pygame.Surface = None
+    ) -> None:
+        if image:
+            self.image = pygame.transform.scale(image, self.desired_size)
+        if alt_image:
+            self.altImage = pygame.transform.scale(alt_image, self.desired_size)

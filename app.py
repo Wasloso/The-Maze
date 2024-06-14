@@ -2,13 +2,11 @@ import sys
 
 import pygame.key
 from pygame.event import Event
-
+from data import SettingsManager
 from screens import MainMenu, ScreenManager
 
 
 class App:
-    screen_manager: ScreenManager = None
-    screen = None
 
     def __init__(self, width: int = 1280, height: int = 800) -> None:
         self.width: int = width
@@ -20,7 +18,9 @@ class App:
 
     def run(self) -> None:
         # Initializing display and necessary screens
-        screen_manager = ScreenManager()
+        setting_manager: SettingsManager = SettingsManager()
+        setting_manager.load_settings()
+        screen_manager: ScreenManager = ScreenManager(setting_manager)
 
         surface = pygame.display.set_mode((self.width, self.height))
         screen_manager.load_screen(MainMenu(screen_manager, surface))
@@ -32,6 +32,7 @@ class App:
 
             for event in events:
                 if event.type == pygame.QUIT:
+                    setting_manager.save_settings()
                     pygame.quit()
                     sys.exit()
 
