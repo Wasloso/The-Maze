@@ -7,7 +7,7 @@ class SettingsManager:
         self.path = path
         self.settings = None
         self.volume = None
-        self.mute: bool = None
+        self.mute: bool = False
 
     def load_settings(self):
         with open(self.path, "r") as f:

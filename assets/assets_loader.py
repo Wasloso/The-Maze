@@ -1,5 +1,4 @@
-from enum import Enum
-
+import pygame
 from pygame.image import load
 from pygame.surface import Surface
 import os
@@ -13,6 +12,7 @@ class AssetsLoader:
     _buttonDir = os.path.join(_dir, "buttons")
     _playerDir = os.path.join(_dir, "player")
     _mazeDir = os.path.join(_dir, "maze")
+    _musicDir = os.path.join(_dir, "music")
     _objectiveDir = os.path.join(_dir, "objective")
     _textDir = os.path.join(_dir, "text")
     _volumeDir = os.path.join(_dir, "volume")
@@ -75,6 +75,9 @@ class AssetsLoader:
             "wall": os.path.join(_mazeDir, "wall.png"),
             "floor": os.path.join(_mazeDir, "floor.png"),
         },
+        "music": {
+            "background": os.path.join(_musicDir, "background.wav"),
+        },
         "text": {
             "the_maze": os.path.join(_textDir, "the_maze.png"),
         },
@@ -112,6 +115,10 @@ class AssetsLoader:
     @classmethod
     def get_maze(cls, name: str) -> Surface:
         return cls.get_image("maze", name)
+
+    @classmethod
+    def load_music(cls, name: str) -> None:
+        pygame.mixer.music.load(AssetsLoader.paths['music'][name])
 
     @classmethod
     def get_objective(cls, reached: bool = False) -> Surface:

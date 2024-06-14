@@ -24,6 +24,9 @@ class MainMenu(ScreenBase):
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
 
+        AssetsLoader.load_music('background')
+        pygame.mixer.music.play(-1)
+
         file = open("data/saved_mazes.json", "r")
         # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button

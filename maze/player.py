@@ -41,8 +41,3 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, events, keys):
         ...
-
-    # def move_player(self, direction, multiplier=1) -> None:
-    #     new_rect = self.try_move(direction, multiplier)
-    #     if new_rect.collidelist(self.collidable_cells) == -1:
-    #         self.player.rect = new_rect

@@ -7,10 +7,12 @@ from screens import MainMenu, ScreenManager
 
 
 class App:
-
     def __init__(self, width: int = 1280, height: int = 800) -> None:
         self.width: int = width
         self.height: int = height
+
+        pygame.mixer.pre_init(44100, -16, 2, 2048)
+        pygame.mixer.init()
 
         pygame.init()
         pygame.font.init()
@@ -26,7 +28,6 @@ class App:
         screen_manager.load_screen(MainMenu(screen_manager, surface))
 
         clock = pygame.time.Clock()
-
         while True:
             events, keys = pygame.event.get(), pygame.key.get_pressed()
 

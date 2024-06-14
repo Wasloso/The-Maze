@@ -7,6 +7,8 @@ import ast
 
 
 class Maze:
+    collidable_cells = None
+
     def __init__(
         self,
         cell_size: int,
