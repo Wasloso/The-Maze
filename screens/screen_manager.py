@@ -34,7 +34,8 @@ class ScreenManager:
         self.current_screen = MazeSelectionScreen(previous_screen, manager)
 
     def start_game(self, previous_screen, manager, maze, ai=False):
-        self.current_screen = GameScreen(previous_screen, manager, maze, ai)
+        # FIXME: Create choose ai value
+        self.current_screen = GameScreen(previous_screen, manager, maze, True)
 
     def credits(self, previous_screen, manager):
         self.current_screen = CreditsScreen(previous_screen, manager)

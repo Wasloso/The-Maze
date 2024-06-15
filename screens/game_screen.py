@@ -5,7 +5,7 @@ from maze.cell import Cell
 from maze.maze import Maze
 from maze.objective import Objective
 from maze.player import Player
-from maze.solver import a_star
+from maze.solver import Solver
 from screens.screen_base import *
 from ui_components.button import Button
 from assets.assets_loader import AssetsLoader
@@ -48,8 +48,8 @@ class GameScreen(ScreenBase):
         self.floorImage: Surface = pygame.transform.scale(
             AssetsLoader.get_cell("floor"), (self.maze.cell_size, self.maze.cell_size)
         )
-
-        print(a_star(self.maze, self.player))
+        if self.ai:
+            self.solver = Solver(self.maze, self.player)
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
@@ -63,10 +63,16 @@ class GameScreen(ScreenBase):
         self.back_button.draw(surface)
 
     def update(self, events: list, keys: list) -> None:
+        if self.ai and self.solver:
+            self.solver.update()
+        else:
+            self.handle_buttons_click(keys)
+
         for event in events:
             self.back_button.update(event)
+
         self.player.update(events, keys)
-        self.handle_buttons_click(keys)
+
         if self.objective.check_collision(self.player.rect):
             # TODO: Implement win screen
             pass
