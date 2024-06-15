@@ -24,7 +24,7 @@ class MainMenu(ScreenBase):
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
 
-        AssetsLoader.load_music('background')
+        AssetsLoader.load_music("background")
         pygame.mixer.music.play(-1)
 
         file = open("data/saved_mazes.json", "r")
@@ -80,3 +80,7 @@ class MainMenu(ScreenBase):
     def update(self, events, keys) -> None:
         for event in events:
             self.buttons.update(event)
+
+
+if __name__ == "__main__":
+    pass

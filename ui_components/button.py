@@ -24,13 +24,13 @@ class Button(UIComponent):
         self.altImage = (
             pygame.transform.scale(alt_image, desired_size) if alt_image else None
         )
-        self.rect.center = position
+        self.rect.center = position  # FIXME: change to topleft for consitency (need to adjust some positions in other files)
         self.displayImage = self.image
         self.callback = callback
 
     def draw(self, screen: pygame.Surface, position: tuple[int, int] = None) -> None:
         if not position:
-            position = self.rect
+            position = self.rect.topleft
         elif position != self.rect:
             self.rect.topleft = position
         screen.blit(self.displayImage, position)

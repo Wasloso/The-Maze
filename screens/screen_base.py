@@ -14,17 +14,20 @@ SETTINGS = "settings_screen"
 GAME = "game_screen"
 CREDITS = "credits_screen"
 MAZE_SELECTION = "maze_selection_screen"
+MAZE_CREATOR = "maze_creator_screen"
 
 
 class ScreenBase(ABC):
     def __init__(
-            self,
-            previous_screen: Optional[ScreenBase],
-            manager,
-            screen_name: str = MAIN_MENU,
+        self,
+        previous_screen: Optional[ScreenBase],
+        manager,
+        screen_name: str = MAIN_MENU,
     ) -> None:
-        self.previous_screen = previous_screen  # TODO: we can get rid of this i guess
-        self.screen_name = screen_name
+        self.previous_screen: str = (
+            previous_screen  # TODO: we can get rid of this i guess
+        )
+        self.screen_name: str = screen_name
         self.manager = manager
         self.background = AssetsLoader.get_background(self.screen_name)
         self.background = UIComponent(

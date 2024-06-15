@@ -2,7 +2,15 @@ import sys
 
 import pygame
 
-from . import GameScreen, CreditsScreen, SettingsScreen, MazeSelectionScreen, ScreenBase
+
+from . import (
+    MazeSelectionScreen,
+    GameScreen,
+    CreditsScreen,
+    SettingsScreen,
+    MazeCreatorScreen,
+    ScreenBase,
+)
 from data import SettingsManager
 
 
@@ -36,6 +44,9 @@ class ScreenManager:
             previous_screen, manager, self.settings_manager
         )
 
+    def maze_creator(self, previous_screen, manager, maze=None):
+        self.current_screen = MazeCreatorScreen(previous_screen, manager, maze)
+
     def back(self, previous_screen):
         if previous_screen:
             self.current_screen = previous_screen
@@ -43,3 +54,7 @@ class ScreenManager:
             self.settings_manager.save_settings()
             pygame.quit()
             sys.exit()
+
+
+if __name__ == "__main__":
+    pass

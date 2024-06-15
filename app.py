@@ -3,7 +3,7 @@ import sys
 import pygame.key
 from pygame.event import Event
 from data import SettingsManager
-from screens import MainMenu, ScreenManager
+from screens import ScreenManager, MainMenu
 
 
 class App:

@@ -40,8 +40,12 @@ class GameScreen(ScreenBase):
         self.collidable_cells: list[Cell] = [
             cell.rect for cell in self.cells if cell.collidable
         ]
-        self.wallImage: Surface = AssetsLoader.get_cell("wall")
-        self.floorImage: Surface = AssetsLoader.get_cell("floor")
+        self.wallImage: Surface = pygame.transform.scale(
+            AssetsLoader.get_cell("wall"), (self.maze.cell_size, self.maze.cell_size)
+        )
+        self.floorImage: Surface = pygame.transform.scale(
+            AssetsLoader.get_cell("floor"), (self.maze.cell_size, self.maze.cell_size)
+        )
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)

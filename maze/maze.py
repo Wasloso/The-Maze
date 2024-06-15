@@ -28,14 +28,15 @@ class Maze:
 
     def create_grid(self) -> list[list[Cell]]:
         grid = []
-        for y in range(self.columns):
+        for y in range(self.rows):
             row = []
-            for x in range(self.rows):
+            for x in range(self.columns):
                 cell = Cell(
                     self.cell_size, x * self.cell_size, y * self.cell_size, True
                 )
                 row.append(cell)
             grid.append(row)
+        self.grid = grid
         return grid
 
     def randomize_maze(self):

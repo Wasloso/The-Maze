@@ -108,8 +108,8 @@ class VolumeController(UIComponent):
             self.muted_alt if mute else self.unmuted_alt,
         )
         self.volume_down_button.callback = lambda: (
-            self.settings_manager.change_volume(False) if not mute else lambda: None
+            self.settings_manager.change_volume(False) if not mute else None
         )
         self.volume_up_button.callback = lambda: (
-            self.settings_manager.change_volume(True) if not mute else lambda: None
+            self.settings_manager.change_volume(True) if not mute else None
         )
