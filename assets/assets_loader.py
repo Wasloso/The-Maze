@@ -59,6 +59,16 @@ class AssetsLoader:
             "volume_down_button_hovered": os.path.join(
                 _buttonDir, "volume_down_button_hovered.png"
             ),
+            "run_button": os.path.join(_buttonDir, "run_button.png"),
+            "run_button_hovered": os.path.join(_buttonDir, "run_button_hovered.png"),
+            "add_button": os.path.join(_buttonDir, "add_button.png"),
+            "add_button_hovered": os.path.join(_buttonDir, "add_button_hovered.png"),
+            "edit_button": os.path.join(_buttonDir, "edit_button.png"),
+            "edit_button_hovered": os.path.join(_buttonDir, "edit_button_hovered.png"),
+            "delete_button": os.path.join(_buttonDir, "delete_button.png"),
+            "delete_button_hovered": os.path.join(
+                _buttonDir, "delete_button_hovered.png"
+            ),
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
@@ -118,7 +128,7 @@ class AssetsLoader:
 
     @classmethod
     def load_music(cls, name: str) -> None:
-        pygame.mixer.music.load(AssetsLoader.paths['music'][name])
+        pygame.mixer.music.load(AssetsLoader.paths["music"][name])
 
     @classmethod
     def get_objective(cls, reached: bool = False) -> Surface:

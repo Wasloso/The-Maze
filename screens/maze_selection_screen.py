@@ -23,10 +23,12 @@ class MazeSelectionScreen(ScreenBase):
             position=(50, 50), callback=lambda: self.back(previous_screen)
         )
 
+        action_buttons_size = (100, 100)
+
         self.play_maze_button = Button(
-            image=AssetsLoader.get_button("play_button"),
-            alt_image=AssetsLoader.get_button("play_button", hovered=True),
-            desired_size=(50, 50),
+            image=AssetsLoader.get_button("run_button"),
+            alt_image=AssetsLoader.get_button("run_button", hovered=True),
+            desired_size=action_buttons_size,
             callback=lambda: (
                 self.manager.start_game(self, self.manager, self.selected_maze)
                 if self.selected_maze
@@ -37,7 +39,7 @@ class MazeSelectionScreen(ScreenBase):
         self.add_maze_button = Button(
             image=AssetsLoader.get_button("add_button"),
             alt_image=AssetsLoader.get_button("add_button", hovered=True),
-            desired_size=(50, 50),
+            desired_size=action_buttons_size,
             callback=lambda: self.manager.maze_creator(
                 self, self.manager, self.maze_manager
             ),
@@ -45,7 +47,7 @@ class MazeSelectionScreen(ScreenBase):
         self.edit_maze_button = Button(
             image=AssetsLoader.get_button("edit_button"),
             alt_image=AssetsLoader.get_button("edit_button", hovered=True),
-            desired_size=(50, 50),
+            desired_size=action_buttons_size,
             callback=lambda: (
                 self.manager.maze_creator(
                     self, self.manager, self.maze_manager, self.selected_maze
@@ -57,7 +59,7 @@ class MazeSelectionScreen(ScreenBase):
         self.delete_maze_button = Button(
             image=AssetsLoader.get_button("delete_button"),
             alt_image=AssetsLoader.get_button("delete_button", hovered=True),
-            desired_size=(50, 50),
+            desired_size=action_buttons_size,
             callback=lambda: (
                 self.delete_maze(self.selected_maze) if self.selected_maze else None
             ),
@@ -85,8 +87,8 @@ class MazeSelectionScreen(ScreenBase):
             button.draw(
                 surface,
                 (
-                    surface.get_width() // 2 - 50 * len(self.action_buttons) + 100 * i,
-                    surface.get_height() - 100,
+                    surface.get_width() // 2 - 50 * len(self.action_buttons) + 125 * i,
+                    surface.get_height() - 150,
                 ),
             )
 
