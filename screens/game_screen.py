@@ -5,6 +5,7 @@ from maze.cell import Cell
 from maze.maze import Maze
 from maze.objective import Objective
 from maze.player import Player
+from maze.solver import a_star
 from screens.screen_base import *
 from ui_components.button import Button
 from assets.assets_loader import AssetsLoader
@@ -22,6 +23,10 @@ class GameScreen(ScreenBase):
         self.maze: Maze = maze
         self.ai: bool = ai
         player_img: Surface = AssetsLoader.get_player("idle" if not ai else "idle_ai")
+
+
+        print(a_star(maze))
+
         self.player: Player = Player(
             start_position=self.maze.player_start,
             velocity=2,

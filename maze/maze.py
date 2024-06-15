@@ -25,6 +25,8 @@ class Maze:
         self.objective_position = objective_position
         self.grid: list[list[Cell]] = None
         self.name = name
+        self.player_start_pos = None
+        self.objective_position_pos = None
 
     def create_grid(self) -> list[list[Cell]]:
         grid = []
@@ -32,7 +34,7 @@ class Maze:
             row = []
             for x in range(self.columns):
                 cell = Cell(
-                    self.cell_size, x * self.cell_size, y * self.cell_size, True
+                    self.cell_size, x, y, True
                 )
                 row.append(cell)
             grid.append(row)
@@ -90,19 +92,19 @@ class Maze:
             for i, cell in enumerate(row):
                 if cell == 1:
                     cell = Cell(
-                        maze.cell_size, i * maze.cell_size, j * maze.cell_size, True
+                        maze.cell_size, i, j, True
                     )
                     maze_row.append(cell)
                 else:
                     if cell == "P":
+                        maze.player_start_pos = (j, i)
                         maze.player_start = maze.set_rect_position(j, i)
                     elif cell == "O":
+                        maze.objective_position_pos = (j, i)
                         maze.objective_position = maze.set_rect_position(j, i)
                     maze_row.append(
                         Cell(
-                            maze.cell_size,
-                            i * maze.cell_size,
-                            j * maze.cell_size,
+                            maze.cell_size, i, j,
                             False,
                         )
                     )

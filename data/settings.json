@@ -1,6 +1,6 @@
 {
     "sound": {
-        "volume": 10,
-        "mute": false
+        "volume": 100,
+        "mute": true
     }
 }
