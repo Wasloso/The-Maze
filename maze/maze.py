@@ -28,6 +28,12 @@ class Maze:
         self.player_start_pos = None
         self.objective_position_pos = None
 
+    def set_player_start(self, x, y):
+        self.player_start = (x, y)
+
+    def set_objective_position(self, x, y):
+        self.objective_position = (x, y)
+
     def create_grid(self) -> list[list[Cell]]:
         grid = []
         for y in range(self.rows):
@@ -48,7 +54,7 @@ class Maze:
                     cell.change_collidable(True)
 
     def __repr__(self):
-        return f"Maze({self.grid=}, {self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
+        return f"Maze({self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
 
     # TODO jakas fajna metoda generowania losowego labiryntu
     @staticmethod
@@ -114,23 +120,23 @@ class Maze:
     def to_json(self) -> dict:
         player_pos = self.get_rect_pos_in_grid(*self.player_start)
         objective_pos = self.get_rect_pos_in_grid(*self.objective_position)
-        print(player_pos, objective_pos)
         grid = []
         for row in self.grid:
             grid_row = []
             for cell in row:
-                if cell.collidable:
-                    grid_row.append(1)
-                elif (
+                if (
                     row.index(cell) == player_pos[0]
                     and self.grid.index(row) == player_pos[1]
                 ):
                     grid_row.append("P")
+
                 elif (
                     row.index(cell) == objective_pos[0]
                     and self.grid.index(row) == objective_pos[1]
                 ):
                     grid_row.append("O")
+                elif cell.collidable:
+                    grid_row.append(1)
                 else:
                     grid_row.append(0)
             grid.append(grid_row)

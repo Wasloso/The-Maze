@@ -1,5 +1,5 @@
 from . import ScreenBase
-from .screen_base import MAZE_CREATOR, MAZE_SELECTION
+from .screen_base import MAZE_CREATOR, MAZE_SELECTION, MAIN_MENU
 from maze.maze import Maze
 from maze.cell import Cell
 from pygame.surface import Surface
@@ -14,13 +14,30 @@ class MazeCreatorScreen(ScreenBase):
         self,
         previous_screen: Optional[ScreenBase],
         manager,
+        maze_manager,
         maze: Maze = None,
     ) -> None:
         super().__init__(previous_screen, manager, screen_name=MAZE_CREATOR)
+        self.player_img = AssetsLoader.get_player("idle")
+        self.objective_img = AssetsLoader.get_objective()
+        self.maze_manager = maze_manager
+        self.maze: Maze = maze
+        self.confirm_button = Button(
+            desired_size=(50, 50),
+            position=(25, 25),
+            image=AssetsLoader.get_button("confirm_button"),
+            alt_image=AssetsLoader.get_button("confirm_button", hovered=True),
+            callback=(
+                (lambda m=self.maze: self.add_maze())
+                if maze is None
+                else lambda: self.manager.back(previous_screen)
+            ),
+        )
         if maze is None:
             maze = Maze(40)
             maze.create_grid()
-        self.maze: Maze = maze
+            self.maze = maze
+
         transparent_surf = Surface(
             (self.maze.cell_size, self.maze.cell_size), pygame.SRCALPHA
         )
@@ -32,11 +49,6 @@ class MazeCreatorScreen(ScreenBase):
             AssetsLoader.get_cell("floor"), (self.maze.cell_size, self.maze.cell_size)
         )
 
-        self.back_button = Button.go_back_button(
-            desired_size=(50, 50),
-            position=(25, 25),
-            callback=lambda: self.manager.back(previous_screen),
-        )
         self.cell_buttons = []
         self.cells = []
         for i, row in enumerate(self.maze.grid):
@@ -68,12 +80,49 @@ class MazeCreatorScreen(ScreenBase):
                 surface.blit(self.floor_img, cell.rect.topleft)
         for button in self.cell_buttons:
             button.draw(surface)
-        self.back_button.draw(surface)
+        self.confirm_button.draw(surface)
+
+        if self.maze.player_start:
+            surface.blit(
+                self.player_img,
+                self.maze.player_start,
+            )
+        if self.maze.objective_position:
+            surface.blit(
+                self.objective_img,
+                self.maze.objective_position,
+            )
 
     def update(self, events, keys) -> None:
         for event in events:
-            self.back_button.update(event)
+            self.confirm_button.update(event)
             for button in self.cell_buttons:
                 button.update(event)
+            if (
+                event.type == pygame.MOUSEBUTTONDOWN
+                and event.button == pygame.BUTTON_RIGHT
+            ):
+                pos = pygame.mouse.get_pos()
+                grid_pos = self.maze.get_rect_pos_in_grid(*pos)
+                objective_pos = (
+                    self.maze.get_rect_pos_in_grid(*self.maze.objective_position)
+                    if self.maze.objective_position
+                    else None
+                )
+                player_pos = (
+                    self.maze.get_rect_pos_in_grid(*self.maze.player_start)
+                    if self.maze.player_start
+                    else None
+                )
+
+                if keys[pygame.K_LSHIFT] and grid_pos != player_pos:
+                    self.maze.objective_position = pos
+                elif grid_pos != objective_pos:
+                    self.maze.player_start = pos
 
     def toggle_collidable(self, cell: Cell): ...
+
+    def add_maze(self):
+        self.maze_manager.add_maze(self.maze)
+        self.previous_screen.reload()
+        self.manager.back(self.previous_screen)

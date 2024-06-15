@@ -44,8 +44,10 @@ class ScreenManager:
             previous_screen, manager, self.settings_manager
         )
 
-    def maze_creator(self, previous_screen, manager, maze=None):
-        self.current_screen = MazeCreatorScreen(previous_screen, manager, maze)
+    def maze_creator(self, previous_screen, manager, maze_manager, maze=None):
+        self.current_screen = MazeCreatorScreen(
+            previous_screen, manager, maze_manager, maze
+        )
 
     def back(self, previous_screen):
         if previous_screen:
