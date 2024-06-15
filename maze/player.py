@@ -39,5 +39,4 @@ class Player(pygame.sprite.Sprite):
     def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)
 
-    def update(self, events, keys):
-        ...
+    def update(self, events, keys): ...

@@ -40,7 +40,12 @@ class Button(UIComponent):
         self.displayImage = (
             self.image if not hovered or not self.altImage else self.altImage
         )
-        if event.type == pygame.MOUSEBUTTONDOWN and hovered and self.callback:
+        if (
+            self.callback
+            and hovered
+            and event.type == pygame.MOUSEBUTTONDOWN
+            and event.button == pygame.BUTTON_LEFT
+        ):
             self.callback()
 
     @staticmethod
