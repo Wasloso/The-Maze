@@ -14,19 +14,14 @@ class MazeSelectionScreen(ScreenBase):
         self.maze_manager = MazeManager()
         self.maze_manager.load_mazes()
         self.selected_maze = None
+        self.scroll_offset = 0
+        self.scroll_max = 0
+
+        self.add_buttons()
 
         self.back_button = Button.go_back_button(
             position=(50, 50), callback=lambda: self.back(previous_screen)
         )
-        for maze in self.maze_manager.mazes:
-            self.buttons.append(
-                Button(
-                    image=AssetsLoader.get_button("play_button"),
-                    alt_image=AssetsLoader.get_button("play_button", hovered=True),
-                    desired_size=(300, 100),
-                    callback=lambda m=maze: self.select_maze(m),
-                )
-            )
 
         self.play_maze_button = Button(
             image=AssetsLoader.get_button("play_button"),
@@ -78,7 +73,13 @@ class MazeSelectionScreen(ScreenBase):
         super().draw(surface)
         self.back_button.draw(surface)
         for i, button in enumerate(self.buttons):
-            button.draw(surface, (50, 150 + i * 150))
+            button.draw(
+                surface,
+                (
+                    50 + (i * button.rect.width + 30) - self.scroll_offset,
+                    surface.get_height() // 2 - button.rect.height // 2,
+                ),
+            )
 
         for i, button in enumerate(self.action_buttons):
             button.draw(
@@ -89,12 +90,33 @@ class MazeSelectionScreen(ScreenBase):
                 ),
             )
 
+    def add_buttons(self):
+        self.buttons.clear()
+        for maze in self.maze_manager.mazes:
+            self.buttons.append(
+                Button(
+                    image=AssetsLoader.get_button("play_button"),
+                    alt_image=AssetsLoader.get_button("play_button", hovered=True),
+                    desired_size=(300, 100),
+                    callback=lambda m=maze: self.select_maze(m),
+                )
+            )
+        total_width = len(self.buttons) * (self.buttons[0].rect.width + 30)
+        self.scroll_max = max(0, total_width - 1280)
+        self.scroll_offset = max(self.scroll_offset, 0)
+
     def update(self, events, keys) -> None:
         super().update(events, keys)
         for event in events:
             self.back_button.update(event)
             for button in [*self.buttons, *self.action_buttons]:
                 button.update(event)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    self.scroll_offset = max(self.scroll_offset - 10, 0)
+                elif event.button == 5:
+                    self.scroll_offset = min(self.scroll_offset + 10, self.scroll_max)
 
     def select_maze(self, maze):
         self.selected_maze = maze
@@ -109,16 +131,6 @@ class MazeSelectionScreen(ScreenBase):
         self.manager.back(previous_screen)
 
     def reload(self):
-        self.buttons: list[Button] = []
         self.maze_manager.load_mazes()
         self.selected_maze = None
-        for maze in self.maze_manager.mazes:
-            print(f"{maze}")
-            self.buttons.append(
-                Button(
-                    image=AssetsLoader.get_button("play_button"),
-                    alt_image=AssetsLoader.get_button("play_button", hovered=True),
-                    desired_size=(300, 100),
-                    callback=lambda m=maze: self.select_maze(m),
-                )
-            )
+        self.add_buttons()

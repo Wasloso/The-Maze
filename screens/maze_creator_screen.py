@@ -27,11 +27,7 @@ class MazeCreatorScreen(ScreenBase):
             position=(25, 25),
             image=AssetsLoader.get_button("confirm_button"),
             alt_image=AssetsLoader.get_button("confirm_button", hovered=True),
-            callback=(
-                (lambda m=self.maze: self.add_maze())
-                if maze is None
-                else lambda: self.manager.back(previous_screen)
-            ),
+            callback=(lambda: self.manager.back(previous_screen)) if maze else None,
         )
         if maze is None:
             maze = Maze(40)
@@ -120,7 +116,12 @@ class MazeCreatorScreen(ScreenBase):
                 elif grid_pos != objective_pos:
                     self.maze.player_start = pos
 
-    def toggle_collidable(self, cell: Cell): ...
+                if (
+                    self.maze.player_start
+                    and self.maze.objective_position
+                    and self.confirm_button.callback is None
+                ):
+                    self.confirm_button.callback = lambda m=self.maze: self.add_maze()
 
     def add_maze(self):
         self.maze_manager.add_maze(self.maze)
