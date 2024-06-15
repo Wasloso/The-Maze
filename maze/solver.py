@@ -18,20 +18,21 @@ def reconstruct_path(came_from, current_pos):
 def a_star(maze: Maze):
     player_pos, objective_pos = maze.player_start_pos, maze.objective_position_pos
     print(player_pos, objective_pos)
+    print(maze)
     open_set = [(0, player_pos)]
     came_from = {}
     cost_so_far = {player_pos: 0}
 
     while open_set:
         cost, current_pos = heappop(open_set)
-        print(current_pos)
+        print(current_pos, objective_pos)
         if current_pos == objective_pos:
             return reconstruct_path(came_from, current_pos)
 
         # Find if cell is collidable in each direction [TOP, RIGHT, LEFT, BOTTOM]
         for next_pos in [(-1, 0), (0, 1), (0, -1), (1, 0)]:
             new_pos = tuple(map(sum, zip(current_pos, next_pos)))
-            if 0 <= new_pos[0] < maze.rows and 0 <= new_pos[1] < maze.columns:
+            if 0 <= new_pos[1] < maze.rows and 0 <= new_pos[0] < maze.columns:
                 if maze.grid[new_pos[0]][new_pos[1]].collidable == 0:
                     new_cost = cost_so_far.get(current_pos) + 1
                     if new_pos not in cost_so_far or new_cost < cost_so_far[new_pos]:
