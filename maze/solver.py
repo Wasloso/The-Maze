@@ -1,4 +1,7 @@
+import time
 from heapq import heappop, heappush
+
+import pygame.time
 
 from maze import Maze
 
@@ -15,7 +18,7 @@ def reconstruct_path(came_from, current_pos):
     return total_path
 
 
-def a_star(maze: Maze):
+def a_star(maze: Maze, player):
     player_pos, objective_pos = maze.player_start_pos, maze.objective_position_pos
     print(player_pos, objective_pos)
     print(maze)
@@ -25,7 +28,8 @@ def a_star(maze: Maze):
 
     while open_set:
         cost, current_pos = heappop(open_set)
-        print(current_pos, objective_pos)
+        print(current_pos)
+        player.move_to_pos(maze.set_rect_position(*current_pos))
         if current_pos == objective_pos:
             return reconstruct_path(came_from, current_pos)
 
@@ -40,6 +44,8 @@ def a_star(maze: Maze):
                         priority = new_cost + heuristic(new_pos, objective_pos)
                         heappush(open_set, (priority, new_pos))
                         came_from[new_pos] = current_pos
+                        # player.move()
+        pygame.time.wait(1000)
 
     # Failure, goal was never reached
     return None

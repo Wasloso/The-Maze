@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = start_position
         self.velocity = velocity
+        print(start_position)
         self.directions = {
             pygame.K_UP: (0, -1),
             pygame.K_DOWN: (0, 1),
@@ -35,6 +36,12 @@ class Player(pygame.sprite.Sprite):
         new_rect.x += x * self.velocity * multiplier
         new_rect.y += y * self.velocity * multiplier
         return new_rect
+
+    def move_to_pos(self, pos):
+        x, y = pos
+        print(x * self.velocity, y * self.velocity)
+        self.rect.x = x
+        self.rect.y = y
 
     def draw(self, screen: Surface):
         screen.blit(self.image, self.rect)

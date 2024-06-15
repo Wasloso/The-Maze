@@ -24,9 +24,6 @@ class GameScreen(ScreenBase):
         self.ai: bool = ai
         player_img: Surface = AssetsLoader.get_player("idle" if not ai else "idle_ai")
 
-
-        print(a_star(maze))
-
         self.player: Player = Player(
             start_position=self.maze.player_start,
             velocity=2,
@@ -51,6 +48,8 @@ class GameScreen(ScreenBase):
         self.floorImage: Surface = pygame.transform.scale(
             AssetsLoader.get_cell("floor"), (self.maze.cell_size, self.maze.cell_size)
         )
+
+        print(a_star(self.maze, self.player))
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
