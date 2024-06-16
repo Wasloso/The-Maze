@@ -1,18 +1,20 @@
 from __future__ import annotations
 import random
 
-from maze import Cell
+# Non modular import to avoid circural import
+from .cell import Cell
+from .player import Direction
 
 
 class Maze:
     def __init__(
-        self,
-        cell_size: int,
-        rows: int = 20,
-        columns: int = 32,
-        player_start: tuple[int, int] = None,
-        objective_position: tuple[int, int] = None,
-        name: str = None,
+            self,
+            cell_size: int,
+            rows: int = 20,
+            columns: int = 32,
+            player_start: tuple[int, int] = None,
+            objective_position: tuple[int, int] = None,
+            name: str = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -27,28 +29,39 @@ class Maze:
     def create_grid(self) -> list[list[Cell]]:
         grid = []
         for y in range(self.rows):
-            row = []
-            for x in range(self.columns):
-                cell = Cell(x, y, self.cell_size, True)
-                row.append(cell)
+            row = [Cell(x, y, self.cell_size, True) for x in range(self.columns)]
             grid.append(row)
         self.grid = grid
         return grid
 
     def randomize_maze(self) -> None:
-        non_collidable_cells: list[Cell] = []
-        for i, row in enumerate(self.grid):
-            for j, cell in enumerate(row):
-                if (i == 0 or j == 0) or (i == self.rows - 1 or j == self.columns - 1):
-                    cell.collidable = True
-                elif random.random() < 0.7:
-                    cell.collidable = True
-                else:
-                    non_collidable_cells.append(cell)
-                    cell.collidable = False
-        self.player_start = random.choice(non_collidable_cells).rect.center
-        while self.player_start == self.objective_position:
-            self.objective_position = random.choice(non_collidable_cells).rect.center
+        def get_frontier(cell: Cell) -> list[Cell]:
+            frontier = []
+            for direction in Direction:
+                next_cell = tuple(map(sum, zip(cell.position, direction.value)))
+                if 0 < next_cell[1] < self.rows - 1 and 0 < next_cell[0] < self.columns - 1:
+                    frontier.append(self.grid[next_cell[1]][next_cell[0]])
+            return frontier
+
+        def choose_starting_pos() -> Cell:
+            return random.choice([cell for row in self.grid for cell in row])
+
+        starting_pos = choose_starting_pos()
+        while starting_pos.position[0] in [0, self.columns - 1] or starting_pos.position[1] in [0, self.rows - 1]:
+            starting_pos = choose_starting_pos()
+        starting_pos.collidable = False
+        self.player_start = starting_pos.rect.center
+        last_pos = starting_pos
+        frontier = get_frontier(starting_pos)
+        while frontier:
+            next_cell = frontier.pop(random.randint(0, len(frontier) - 1))
+            neighbour_cells = get_frontier(next_cell)
+            number_of_path_cells = sum([not cell.collidable for cell in neighbour_cells])
+            if number_of_path_cells == 1:
+                next_cell.collidable = False
+                frontier += neighbour_cells
+            last_pos = next_cell
+        self.objective_position = last_pos.rect.center
 
     def __repr__(self) -> str:
         return f"Maze({self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
@@ -83,14 +96,14 @@ class Maze:
             grid_row = []
             for cell in row:
                 if (
-                    row.index(cell) == player_pos[0]
-                    and self.grid.index(row) == player_pos[1]
+                        row.index(cell) == player_pos[0]
+                        and self.grid.index(row) == player_pos[1]
                 ):
                     grid_row.append("P")
 
                 elif (
-                    row.index(cell) == objective_pos[0]
-                    and self.grid.index(row) == objective_pos[1]
+                        row.index(cell) == objective_pos[0]
+                        and self.grid.index(row) == objective_pos[1]
                 ):
                     grid_row.append("O")
                 elif cell.collidable:

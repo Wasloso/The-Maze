@@ -62,6 +62,7 @@ class GameScreen(ScreenBase):
         for cell in self.cells:
             if cell.visited or visibility_rect.colliderect(cell.rect):
                 cell.visited = True
+                # cell.visited = False
                 surface.blit(
                     self.wallImage if cell.collidable else self.floorImage,
                     cell.rect.topleft,
