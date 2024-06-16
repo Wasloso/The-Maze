@@ -26,7 +26,8 @@ class MazeManager:
     def add_maze(self, maze: Maze) -> None:
         if maze.name is None:
             name = 0
-            while any(m.name == name for m in self.mazes):
+            existing_names = {m.name for m in self.mazes}
+            while f"Maze {name}" in existing_names:
                 name += 1
             maze.name = f"Maze {name}"
         self.mazes.append(maze)
