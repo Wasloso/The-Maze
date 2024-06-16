@@ -36,6 +36,17 @@ class MazeSelectionScreen(ScreenBase):
             ),
         )
 
+        self.play_ai_button = Button(
+            image=AssetsLoader.get_button("run_ai_button"),
+            alt_image=AssetsLoader.get_button("run_ai_button", hovered=True),
+            desired_size=action_buttons_size,
+            callback=lambda: (
+                self.manager.start_game(self, self.manager, self.selected_maze, ai=True)
+                if self.selected_maze
+                else None
+            ),
+        )
+
         self.add_maze_button = Button(
             image=AssetsLoader.get_button("add_button"),
             alt_image=AssetsLoader.get_button("add_button", hovered=True),
@@ -66,6 +77,7 @@ class MazeSelectionScreen(ScreenBase):
         )
         self.action_buttons = [
             self.play_maze_button,
+            self.play_ai_button,
             self.edit_maze_button,
             self.delete_maze_button,
             self.add_maze_button,
