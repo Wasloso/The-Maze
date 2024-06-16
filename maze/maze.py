@@ -8,13 +8,13 @@ from .player import Direction
 
 class Maze:
     def __init__(
-            self,
-            cell_size: int,
-            rows: int = 20,
-            columns: int = 32,
-            player_start: tuple[int, int] = None,
-            objective_position: tuple[int, int] = None,
-            name: str = None,
+        self,
+        cell_size: int,
+        rows: int = 20,
+        columns: int = 32,
+        player_start: tuple[int, int] = None,
+        objective_position: tuple[int, int] = None,
+        name: str = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -40,7 +40,10 @@ class Maze:
             frontier = []
             for direction in Direction:
                 next_cell = tuple(map(sum, zip(cell.position, direction.value)))
-                if 0 < next_cell[1] < self.rows - 1 and 0 < next_cell[0] < self.columns - 1:
+                if (
+                    0 < next_cell[1] < self.rows - 1
+                    and 0 < next_cell[0] < self.columns - 1
+                ):
                     frontier.append(self.grid[next_cell[1]][next_cell[0]])
             return frontier
 
@@ -48,7 +51,10 @@ class Maze:
             return random.choice(self.cells)
 
         starting_pos = choose_starting_pos()
-        while starting_pos.position[0] in [0, self.columns - 1] or starting_pos.position[1] in [0, self.rows - 1]:
+        while starting_pos.position[0] in [
+            0,
+            self.columns - 1,
+        ] or starting_pos.position[1] in [0, self.rows - 1]:
             starting_pos = choose_starting_pos()
         self.player_start = starting_pos.rect.center
         starting_pos.collidable = False
@@ -58,7 +64,9 @@ class Maze:
         while frontier:
             next_cell = frontier.pop(random.randint(0, len(frontier) - 1))
             neighbour_cells = get_frontier(next_cell)
-            number_of_path_cells = sum([not cell.collidable for cell in neighbour_cells])
+            number_of_path_cells = sum(
+                [not cell.collidable for cell in neighbour_cells]
+            )
             if number_of_path_cells == 1:
                 next_cell.collidable = False
                 frontier += neighbour_cells
@@ -77,7 +85,7 @@ class Maze:
     def from_json(json) -> Maze:
         grid = json["grid"]
 
-        maze = Maze(json["cell_size"], len(grid[0]), len(grid), name=json["name"])
+        maze = Maze(json["cell_size"], len(grid), len(grid[0]), name=json["name"])
         for i, row in enumerate(grid):
             maze_row = []
             for j, cell in enumerate(row):
