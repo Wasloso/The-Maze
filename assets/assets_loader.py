@@ -69,6 +69,18 @@ class AssetsLoader:
             "delete_button_hovered": os.path.join(
                 _buttonDir, "delete_button_hovered.png"
             ),
+            "randomize_button": os.path.join(_buttonDir, "randomize_button.png"),
+            "randomize_button_hovered": os.path.join(
+                _buttonDir, "randomize_button_hovered.png"
+            ),
+            "confirm_button": os.path.join(_buttonDir, "confirm_button.png"),
+            "confirm_button_hovered": os.path.join(
+                _buttonDir, "confirm_button_hovered.png"
+            ),
+            "run_ai_button": os.path.join(_buttonDir, "run_ai_button.png"),
+            "run_ai_button_hovered": os.path.join(
+                _buttonDir, "run_ai_button_hovered.png"
+            ),
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
