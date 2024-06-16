@@ -97,6 +97,7 @@ class AssetsLoader:
         },
         "text": {
             "the_maze": os.path.join(_textDir, "the_maze.png"),
+            "volume": os.path.join(_textDir, "volume.png"),
         },
         "volume": {
             "active": os.path.join(_volumeDir, "volume_cell_active.png"),

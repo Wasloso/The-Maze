@@ -20,7 +20,7 @@ class VolumeController(UIComponent):
         self.settings_manager: SettingsManager = settings_manager
 
         self.volume_text = UIComponent(
-            image=AssetsLoader.get_text("Volume"), desired_size=(200, 50)
+            image=AssetsLoader.get_text("volume"), desired_size=(200, 50)
         )
         self.volume_up_button = Button(
             image=AssetsLoader.get_button("volume_up_button"),
