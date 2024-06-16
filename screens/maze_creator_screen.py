@@ -131,10 +131,12 @@ class MazeCreatorScreen(ScreenBase):
                     self.maze.objective_position = self.maze.get_rect_position(
                         grid_pos[1], grid_pos[0]
                     )
+                    self.maze.objective_position_pos = grid_pos[1], grid_pos[0]
                 elif grid_pos != objective_pos:
                     self.maze.player_start = self.maze.get_rect_position(
                         grid_pos[1], grid_pos[0]
                     )
+                    self.maze.player_start_pos = grid_pos[1], grid_pos[0]
             if (
                 self.maze.player_start
                 and self.maze.objective_position

@@ -60,12 +60,13 @@ class MainMenu(ScreenBase):
             self.quit_button,
             self.credits_button,
         )
+        # self.buttons.add(self.play_button)
+        print(self.buttons)
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
-        self.the_maze_text.draw(
-            surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50)
-        )
+        self.the_maze_text.draw(surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50))
+        # self.buttons.draw(surface)
         # TODO: z jakiegos powodu uzywanie self.buttons.draw sprawia ze one sie nie aktualizuja (readme)
         for button in self.buttons:
             button.draw(surface)

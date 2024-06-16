@@ -33,7 +33,7 @@ class GameScreen(ScreenBase):
         self.back_button: Button = Button.go_back_button(
             position=(25, 25),
             desired_size=(50, 50),
-            callback=lambda: self.manager.back(previous_screen),
+            callback=self.back,
         )
         self.cells: list[Cell] = [cell for row in self.maze.grid for cell in row]
         self.collidable_cells: list[Cell] = [
@@ -54,6 +54,10 @@ class GameScreen(ScreenBase):
         self.fog_overlay.set_alpha(128)
         self.completed = False
         self.start_time = counter()
+
+    def back(self):
+        del self.solver
+        self.manager.back(self.previous_screen)
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)

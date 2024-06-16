@@ -29,8 +29,7 @@ class Maze:
     def create_grid(self) -> list[list[Cell]]:
         grid = []
         for y in range(self.rows):
-            row = [Cell(x, y, self.cell_size, True) for x in range(self.columns)]
-            grid.append(row)
+            grid.append([Cell(x, y, self.cell_size, True) for x in range(self.columns)])
         self.grid = grid
         return grid
 
@@ -46,14 +45,15 @@ class Maze:
             return frontier
 
         def choose_starting_pos() -> Cell:
-            return random.choice([cell for row in self.grid for cell in row])
+            return random.choice(self.cells)
 
         starting_pos = choose_starting_pos()
         while starting_pos.position[0] in [0, self.columns - 1] or starting_pos.position[1] in [0, self.rows - 1]:
             starting_pos = choose_starting_pos()
-        starting_pos.collidable = False
         self.player_start = starting_pos.rect.center
+        starting_pos.collidable = False
         last_pos = starting_pos
+
         frontier = get_frontier(starting_pos)
         while frontier:
             next_cell = frontier.pop(random.randint(0, len(frontier) - 1))
@@ -64,6 +64,10 @@ class Maze:
                 frontier += neighbour_cells
             last_pos = next_cell
         self.objective_position = last_pos.rect.center
+
+    @property
+    def cells(self) -> list[Cell]:
+        return [cell for row in self.grid for cell in row]
 
     def __repr__(self) -> str:
         return f"Maze({self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
@@ -94,24 +98,15 @@ class Maze:
         player_pos = self.get_cell_index(*self.player_start)
         objective_pos = self.get_cell_index(*self.objective_position)
         grid = []
-        for row in self.grid:
+        for j, row in enumerate(self.grid):
             grid_row = []
-            for cell in row:
-                if (
-                        row.index(cell) == player_pos[0]
-                        and self.grid.index(row) == player_pos[1]
-                ):
+            for i, cell in enumerate(row):
+                if i == player_pos[0] and j == player_pos[1]:
                     grid_row.append("P")
-
-                elif (
-                        row.index(cell) == objective_pos[0]
-                        and self.grid.index(row) == objective_pos[1]
-                ):
+                elif i == objective_pos[0] and j == objective_pos[1]:
                     grid_row.append("O")
-                elif cell.collidable:
-                    grid_row.append(1)
                 else:
-                    grid_row.append(0)
+                    grid_row.append(cell.collidable)
             grid.append(grid_row)
         return {
             "name": self.name,

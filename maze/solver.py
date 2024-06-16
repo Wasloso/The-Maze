@@ -10,6 +10,8 @@ class Solver:
         self.maze = maze
         self.player = player
         self.solution = self.a_star()
+        self.last_dir = None
+        print(self.solution[0])
 
     def a_star(self):
         def heuristic(start_pos, end_pos):
@@ -47,7 +49,6 @@ class Solver:
 
         # Failure, goal was never reached
         return None
-    last_dir = None
 
     def update(self):
         if self.solution:

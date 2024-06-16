@@ -1,5 +1,6 @@
 import sys
 
+import pygame
 import pygame.key
 from pygame.event import Event
 from data import SettingsManager
