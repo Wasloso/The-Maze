@@ -1,7 +1,7 @@
 from .screen_base import *
 from typing import Optional
 from pygame.surface import Surface
-from pygame import Surface
+from pygame import BLEND_RGBA_ADD, Surface
 from pygame.font import Font
 from ui_components.button import Button
 from data import MazeManager
@@ -98,13 +98,11 @@ class MazeSelectionScreen(ScreenBase):
                 ),
             )
             if self.select_maze_idx is not None and i == self.select_maze_idx:
-                image = button.displayImage.copy()
-                image.fill((255, 255, 0))
-                image.set_alpha(128)
-                surface.blit(
-                    image,
-                    (button.rect,),
+                overlay = pygame.Surface(
+                    button.displayImage.get_size(), pygame.SRCALPHA
                 )
+                overlay.fill((50, 50, 0, 32))
+                surface.blit(overlay, (button.rect,), special_flags=BLEND_RGBA_ADD)
 
         for i, button in enumerate(self.action_buttons):
             button.draw(
@@ -146,10 +144,8 @@ class MazeSelectionScreen(ScreenBase):
                     callback=lambda m=maze, i=idx: self.select_maze(maze=m, idx=i),
                 )
             )
-        total_width = (
-            len(self.selection_buttons) * (self.selection_buttons[0].rect.width + 75)
-            if len(self.selection_buttons) != 0
-            else 0
+        total_width = len(self.selection_buttons) * (
+            self.selection_buttons[0].rect.width + 30
         )
         self.scroll_max = max(0, total_width - 1280)
         self.scroll_offset = max(self.scroll_offset, 0)
