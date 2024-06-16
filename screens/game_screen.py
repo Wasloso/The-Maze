@@ -65,7 +65,6 @@ class GameScreen(ScreenBase):
         for cell in self.cells:
             if cell.visited or visibility_rect.colliderect(cell.rect):
                 cell.visited = True
-                # cell.visited = False
                 surface.blit(
                     self.wallImage if cell.collidable else self.floorImage,
                     cell.rect.topleft,
@@ -77,32 +76,25 @@ class GameScreen(ScreenBase):
             self.objective.draw(surface)
         self.player.draw(surface)
         if self.completed:
-            win_surface = pygame.transform.scale(
+            win_surface: Surface = pygame.transform.scale(
                 AssetsLoader.get_background("win_screen"),
                 (surface.get_width() // 2, surface.get_height() // 2),
             )
-
-            # mozna to przeniosc obsluge multiline do UIComponent.add_text_to_surface
-            font = pygame.font.Font(None, 50)
-            text_color = ((255, 255, 255),)
-            for i, line in enumerate(
-                [
+            UIComponent.add_text_to_surface(
+                text=[
                     "You won!" if not self.ai else "AI won!",
                     f"Time elapsed: {self.end_time - self.start_time:.2f} seconds",
-                ]
-            ):
-                text_surface = font.render(line, True, text_color)
-                text_rect = text_surface.get_rect(
-                    center=(
-                        win_surface.get_width() // 2,
-                        win_surface.get_height() // 3 + (i + 1) * font.size(" ")[1],
-                    )
-                )
-                win_surface.blit(text_surface, text_rect)
-
+                ],
+                font=pygame.font.Font(None, 50),
+                text_color=(0, 0, 0),
+                surface=win_surface,
+            )
             win_rect = win_surface.get_rect(center=surface.get_rect().center)
             surface.blit(win_surface, win_rect)
-            self.back_button.draw(surface, win_rect.topleft)
+            self.back_button.draw(
+                surface,
+                position=(win_rect.x + 25, win_rect.y + 25),
+            )
             self.handle_buttons_click = lambda keys: None  # disable movement
         else:
             self.back_button.draw(surface)
