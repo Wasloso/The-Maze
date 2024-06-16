@@ -59,15 +59,22 @@ class MazeCreatorScreen(ScreenBase):
                         desired_size=(self.maze.cell_size, self.maze.cell_size),
                         callback=(
                             (lambda c=cell: c.change_collidable())
-                            if 0 < i < len(self.maze.grid) - 1 and 0 < j < len(row) - 1 else None
+                            if 0 < i < len(self.maze.grid) - 1 and 0 < j < len(row) - 1
+                            else None
                         ),
                     )
                 )
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
-        [surface.blit(self.wall_img if cell.collidable else self.floor_img, cell.rect.topleft) for cell in self.cells]
+        [
+            surface.blit(
+                self.wall_img if cell.collidable else self.floor_img, cell.rect.topleft
+            )
+            for cell in self.cells
+        ]
         [button.draw(surface) for button in self.cell_buttons]
+
         self.confirm_button.draw(surface)
 
         if self.maze.player_start:
@@ -75,7 +82,9 @@ class MazeCreatorScreen(ScreenBase):
             rect.center = self.maze.player_start
             surface.blit(self.player_img, rect)
         if self.maze.objective_position:
-            img = pygame.transform.scale(self.objective_img, (self.maze.cell_size, self.maze.cell_size))
+            img = pygame.transform.scale(
+                self.objective_img, (self.maze.cell_size, self.maze.cell_size)
+            )
             rect = img.get_rect()
             rect.center = self.maze.objective_position
             surface.blit(img, rect)
@@ -85,22 +94,31 @@ class MazeCreatorScreen(ScreenBase):
             self.confirm_button.update(event)
             [button.update(event) for button in self.cell_buttons]
 
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_RIGHT:
+            if (
+                event.type == pygame.MOUSEBUTTONDOWN
+                and event.button == pygame.BUTTON_RIGHT
+            ):
                 pos = pygame.mouse.get_pos()
                 grid_pos = self.maze.get_cell_index(*pos)
                 objective_pos = (
                     self.maze.get_cell_index(*self.maze.objective_position)
-                    if self.maze.objective_position else None
+                    if self.maze.objective_position
+                    else None
                 )
                 player_pos = (
                     self.maze.get_cell_index(*self.maze.player_start)
-                    if self.maze.player_start else None
+                    if self.maze.player_start
+                    else None
                 )
 
                 if keys[pygame.K_LSHIFT] and grid_pos != player_pos:
-                    self.maze.objective_position = self.maze.get_rect_position(grid_pos[1], grid_pos[0])
+                    self.maze.objective_position = self.maze.get_rect_position(
+                        grid_pos[1], grid_pos[0]
+                    )
                 elif grid_pos != objective_pos:
-                    self.maze.player_start = self.maze.get_rect_position(grid_pos[1], grid_pos[0])
+                    self.maze.player_start = self.maze.get_rect_position(
+                        grid_pos[1], grid_pos[0]
+                    )
                 if (
                     self.maze.player_start
                     and self.maze.objective_position
@@ -110,4 +128,5 @@ class MazeCreatorScreen(ScreenBase):
 
     def add_maze(self):
         self.maze_manager.add_maze(self.maze)
+        self.previous_screen.reload()
         self.manager.back(self.previous_screen)
