@@ -18,15 +18,24 @@ MAZE_CREATOR = "maze_creator_screen"
 
 
 class ScreenBase(ABC):
-    def __init__(self, previous_screen: Optional[ScreenBase], manager, screen_name: str = MAIN_MENU) -> None:
+    def __init__(
+        self,
+        previous_screen: Optional[ScreenBase],
+        manager,
+        screen_name: str = MAIN_MENU,
+    ) -> None:
         self.previous_screen: Optional[ScreenBase] = previous_screen
         self.manager = manager
-        self.background = AssetsLoader.get_background(screen_name)
-        self.background = UIComponent((0, 0), self.background.get_size(), self.background)
+        self.background = AssetsLoader.get_background("background")
+        self.background = UIComponent(
+            (0, 0), self.background.get_size(), self.background
+        )
 
     def draw(self, surface: pygame.Surface) -> None:
         if self.background.rect.size != surface.get_size():
-            self.background = UIComponent((0, 0), surface.get_size(), self.background.image)
+            self.background = UIComponent(
+                (0, 0), surface.get_size(), self.background.image
+            )
         self.background.draw(surface)
 
     @abstractmethod
