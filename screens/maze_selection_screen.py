@@ -144,8 +144,10 @@ class MazeSelectionScreen(ScreenBase):
                     callback=lambda m=maze, i=idx: self.select_maze(maze=m, idx=i),
                 )
             )
-        total_width = len(self.selection_buttons) * (
-            self.selection_buttons[0].rect.width + 30
+        total_width = (
+            len(self.selection_buttons) * (self.selection_buttons[0].rect.width + 75)
+            if len(self.selection_buttons) != 0
+            else 0
         )
         self.scroll_max = max(0, total_width - 1280)
         self.scroll_offset = max(self.scroll_offset, 0)
