@@ -24,9 +24,6 @@ class MainMenu(ScreenBase):
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
 
-        AssetsLoader.load_music("background")
-        pygame.mixer.music.play(-1)
-
         self.the_maze_text = UIComponent(image=AssetsLoader.get_text("the_maze"))
 
         self.play_button = Button(

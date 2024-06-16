@@ -1,6 +1,8 @@
 import json
 import pygame
 
+from assets.assets_loader import AssetsLoader
+
 
 class SettingsManager:
     def __init__(self, path="data/settings.json"):
@@ -25,6 +27,7 @@ class SettingsManager:
                 }
             }
             self.save_settings()
+        self.load_background_music("background")
         self.set_game_volume()
 
     def save_settings(self):
@@ -46,6 +49,10 @@ class SettingsManager:
         self.settings["sound"]["mute"] = self.mute
         self.set_game_volume()
         return self.mute
+
+    def load_background_music(self, name: str) -> None:
+        AssetsLoader.load_music("background")
+        pygame.mixer.music.play(-1)
 
     def set_game_volume(self) -> None:
         pygame.mixer.music.set_volume(0 if self.mute else self.volume / 100)
