@@ -115,7 +115,7 @@ class MazeSelectionScreen(ScreenBase):
 
     def add_selection_buttons(self):
         self.selection_buttons.clear()
-        font = Font(None, 100)
+
         text_color = (0, 0, 0)
         alt_text_color = (0, 150, 0)
         size = (400, 300)
@@ -124,6 +124,7 @@ class MazeSelectionScreen(ScreenBase):
         )
 
         for idx, maze in enumerate(self.maze_manager.mazes):
+            font = Font(None, size[0] // len(maze.name) * 2)
             image = UIComponent.add_text_to_surface(
                 text=maze.name,
                 font=font,
