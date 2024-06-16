@@ -27,6 +27,7 @@ class AssetsLoader:
             "settings_screen": os.path.join(_backgroundDir, "settings_screen.png"),
             "game_screen": os.path.join(_backgroundDir, "game_screen.png"),
             "credits_screen": os.path.join(_backgroundDir, "credits_screen.png"),
+            "win_screen": os.path.join(_backgroundDir, "win_screen.png"),
         },
         "button": {
             "play_button": os.path.join(_buttonDir, "play_button.png"),

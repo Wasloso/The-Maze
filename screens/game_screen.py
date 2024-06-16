@@ -5,6 +5,7 @@ from maze import Maze, Direction, Objective, Cell, Player, Solver
 from screens.screen_base import *
 from ui_components import Button
 from assets.assets_loader import AssetsLoader
+from time import perf_counter as counter
 
 
 class GameScreen(ScreenBase):
@@ -51,6 +52,8 @@ class GameScreen(ScreenBase):
         self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
         self.fog_overlay.fill((0, 0, 0))
         self.fog_overlay.set_alpha(128)
+        self.completed = False
+        self.start_time = counter()
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
@@ -70,11 +73,39 @@ class GameScreen(ScreenBase):
             else:
                 surface.blit(self.wallImage, cell.rect.topleft)
                 surface.blit(self.fog_overlay, cell.rect.topleft)
-        self.player.draw(surface)
         if visibility_rect.colliderect(self.objective.rect):
             self.objective.draw(surface)
+        self.player.draw(surface)
+        if self.completed:
+            win_surface = pygame.transform.scale(
+                AssetsLoader.get_background("win_screen"),
+                (surface.get_width() // 2, surface.get_height() // 2),
+            )
 
-        self.back_button.draw(surface)
+            # mozna to przeniosc obsluge multiline do UIComponent.add_text_to_surface
+            font = pygame.font.Font(None, 50)
+            text_color = ((255, 255, 255),)
+            for i, line in enumerate(
+                [
+                    "You won!" if not self.ai else "AI won!",
+                    f"Time elapsed: {self.end_time - self.start_time:.2f} seconds",
+                ]
+            ):
+                text_surface = font.render(line, True, text_color)
+                text_rect = text_surface.get_rect(
+                    center=(
+                        win_surface.get_width() // 2,
+                        win_surface.get_height() // 3 + (i + 1) * font.size(" ")[1],
+                    )
+                )
+                win_surface.blit(text_surface, text_rect)
+
+            win_rect = win_surface.get_rect(center=surface.get_rect().center)
+            surface.blit(win_surface, win_rect)
+            self.back_button.draw(surface, win_rect.topleft)
+            self.handle_buttons_click = lambda keys: None  # disable movement
+        else:
+            self.back_button.draw(surface)
 
     def update(self, events: list, keys: list) -> None:
         if self.ai and self.solver:
@@ -88,8 +119,9 @@ class GameScreen(ScreenBase):
         self.player.update(events, keys)
 
         if self.objective.check_collision(self.player.rect):
-            # TODO: Implement win screen
-            pass
+            if not self.completed:
+                self.completed = True
+                self.end_time = counter()
 
     def handle_buttons_click(self, keys) -> None:
         multiplier: int = 2 if keys[pygame.K_LSHIFT] else 1
