@@ -101,8 +101,16 @@ class MazeSelectionScreen(ScreenBase):
                 overlay = pygame.Surface(
                     button.displayImage.get_size(), pygame.SRCALPHA
                 )
-                overlay.fill((50, 50, 0, 32))
-                surface.blit(overlay, (button.rect,), special_flags=BLEND_RGBA_ADD)
+                overlay.fill((155, 155, 0, 10))
+                mask = button.displayImage.copy()
+                mask.fill((0, 0, 0, 0))
+                mask.blit(button.displayImage, (0, 0))
+                overlay.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+                highlighted_image = button.displayImage.copy()
+                highlighted_image.blit(
+                    overlay, (0, 0), special_flags=pygame.BLEND_RGBA_ADD
+                )
+                surface.blit(highlighted_image, button.rect.topleft)
 
         for i, button in enumerate(self.action_buttons):
             button.draw(
