@@ -18,6 +18,7 @@ class GameScreen(ScreenBase):
         super().__init__(previous_screen, manager, GAME)
         self.maze: Maze = maze
         self.ai: bool = ai
+        self.maze.reset_visibility()
 
         self.player: Player = Player(
             start_position=self.maze.player_start,
@@ -46,12 +47,32 @@ class GameScreen(ScreenBase):
         if self.ai:
             self.solver = Solver(self.maze, self.player)
 
+        self.visibility_scale: int = 5
+        self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
+        self.fog_overlay.fill((0, 0, 0))
+        self.fog_overlay.set_alpha(128)
+
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
+        visibility_rect = self.player.rect.inflate(
+            self.player.rect.width * self.visibility_scale,
+            self.player.rect.height * self.visibility_scale,
+        )
+
         for cell in self.cells:
-            surface.blit(self.wallImage if cell.collidable else self.floorImage, cell.rect.topleft)
+            if cell.visited or visibility_rect.colliderect(cell.rect):
+                cell.visited = True
+                surface.blit(
+                    self.wallImage if cell.collidable else self.floorImage,
+                    cell.rect.topleft,
+                )
+            else:
+                surface.blit(self.wallImage, cell.rect.topleft)
+                surface.blit(self.fog_overlay, cell.rect.topleft)
         self.player.draw(surface)
-        self.objective.draw(surface)
+        if visibility_rect.colliderect(self.objective.rect):
+            self.objective.draw(surface)
+
         self.back_button.draw(surface)
 
     def update(self, events: list, keys: list) -> None:

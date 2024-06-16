@@ -6,13 +6,13 @@ from maze import Cell
 
 class Maze:
     def __init__(
-            self,
-            cell_size: int,
-            rows: int = 20,
-            columns: int = 32,
-            player_start: tuple[int, int] = None,
-            objective_position: tuple[int, int] = None,
-            name: str = None,
+        self,
+        cell_size: int,
+        rows: int = 20,
+        columns: int = 32,
+        player_start: tuple[int, int] = None,
+        objective_position: tuple[int, int] = None,
+        name: str = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
@@ -29,47 +29,29 @@ class Maze:
         for y in range(self.rows):
             row = []
             for x in range(self.columns):
-                cell = Cell(
-                    x, y, self.cell_size, True
-                )
+                cell = Cell(x, y, self.cell_size, True)
                 row.append(cell)
             grid.append(row)
         self.grid = grid
         return grid
 
-    def randomize_maze(self):
-        for row in self.grid:
-            for cell in row:
-                if random.random() < 0.2:
-                    cell.change_collidable(True)
+    def randomize_maze(self) -> None:
+        non_collidable_cells: list[Cell] = []
+        for i, row in enumerate(self.grid):
+            for j, cell in enumerate(row):
+                if (i == 0 or j == 0) or (i == self.rows - 1 or j == self.columns - 1):
+                    cell.collidable = True
+                elif random.random() < 0.7:
+                    cell.collidable = True
+                else:
+                    non_collidable_cells.append(cell)
+                    cell.collidable = False
+        self.player_start = random.choice(non_collidable_cells).rect.center
+        while self.player_start == self.objective_position:
+            self.objective_position = random.choice(non_collidable_cells).rect.center
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Maze({self.cell_size=}, {self.rows=}, {self.columns=}, {self.player_start=}, {self.objective_position=}, {self.name=})"
-
-    # TODO jakas fajna metoda generowania losowego labiryntu
-    @staticmethod
-    def generate_maze(cell_size, rows, columns):
-        maze = Maze(cell_size, rows, columns)
-        maze.grid = maze.create_grid()
-
-        player_start = (
-            random.randint(1, rows - 2) * cell_size + cell_size // 2,
-            random.randint(1, columns - 2) * cell_size + cell_size // 2,
-        )
-        maze.player_start = player_start
-        objective_position = (
-            random.randint(1, rows - 2) * cell_size + cell_size // 2,
-            random.randint(1, columns - 2) * cell_size + cell_size // 2,
-        )
-        maze.objective_position = objective_position
-        cp, rp = player_start[0] // cell_size, player_start[1] // cell_size
-        maze.change_collidable(cp, rp)
-        co, ro = objective_position[0] // cell_size, objective_position[1] // cell_size
-        maze.change_collidable(co, ro)
-        return maze
-
-    def change_collidable(self, column, row):
-        self.grid[row][column].change_collidable()
 
     @staticmethod
     def from_json(json) -> Maze:
@@ -101,14 +83,14 @@ class Maze:
             grid_row = []
             for cell in row:
                 if (
-                        row.index(cell) == player_pos[0]
-                        and self.grid.index(row) == player_pos[1]
+                    row.index(cell) == player_pos[0]
+                    and self.grid.index(row) == player_pos[1]
                 ):
                     grid_row.append("P")
 
                 elif (
-                        row.index(cell) == objective_pos[0]
-                        and self.grid.index(row) == objective_pos[1]
+                    row.index(cell) == objective_pos[0]
+                    and self.grid.index(row) == objective_pos[1]
                 ):
                     grid_row.append("O")
                 elif cell.collidable:
@@ -122,8 +104,16 @@ class Maze:
             "grid": grid,
         }
 
-    def get_cell_index(self, x, y):
+    def get_cell_index(self, x, y) -> tuple[int, int]:
         return x // self.cell_size, y // self.cell_size
 
-    def get_rect_position(self, row, column):
-        return column * self.cell_size + self.cell_size // 2, row * self.cell_size + self.cell_size // 2
+    def get_rect_position(self, row, column) -> tuple[int, int]:
+        return (
+            column * self.cell_size + self.cell_size // 2,
+            row * self.cell_size + self.cell_size // 2,
+        )
+
+    def reset_visibility(self) -> None:
+        for row in self.grid:
+            for cell in row:
+                cell.visited = False

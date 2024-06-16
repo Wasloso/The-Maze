@@ -30,10 +30,16 @@ class MazeCreatorScreen(ScreenBase):
             alt_image=AssetsLoader.get_button("confirm_button", hovered=True),
             callback=(lambda: self.manager.back(previous_screen)) if maze else None,
         )
-        if maze is None:
+        if not maze:
             maze = Maze(40)
             maze.create_grid()
             self.maze = maze
+        self.randomize_button = Button(
+            desired_size=(50, 50),
+            image=AssetsLoader.get_button("randomize_button"),
+            alt_image=AssetsLoader.get_button("randomize_button", hovered=True),
+            callback=(lambda m=self.maze: m.randomize_maze()) if maze else None,
+        )
 
         transparent_surf = Surface(
             (self.maze.cell_size, self.maze.cell_size), pygame.SRCALPHA
@@ -76,6 +82,8 @@ class MazeCreatorScreen(ScreenBase):
         [button.draw(surface) for button in self.cell_buttons]
 
         self.confirm_button.draw(surface)
+        self.randomize_button.rect.topright = surface.get_rect().topright
+        self.randomize_button.draw(surface)
 
         if self.maze.player_start:
             rect = self.player_img.get_rect()
@@ -92,6 +100,7 @@ class MazeCreatorScreen(ScreenBase):
     def update(self, events, keys) -> None:
         for event in events:
             self.confirm_button.update(event)
+            self.randomize_button.update(event)
             [button.update(event) for button in self.cell_buttons]
 
             if (
@@ -119,12 +128,12 @@ class MazeCreatorScreen(ScreenBase):
                     self.maze.player_start = self.maze.get_rect_position(
                         grid_pos[1], grid_pos[0]
                     )
-                if (
-                    self.maze.player_start
-                    and self.maze.objective_position
-                    and self.confirm_button.callback is None
-                ):
-                    self.confirm_button.callback = lambda m=self.maze: self.add_maze()
+            if (
+                self.maze.player_start
+                and self.maze.objective_position
+                and self.confirm_button.callback is None
+            ):
+                self.confirm_button.callback = lambda m=self.maze: self.add_maze()
 
     def add_maze(self):
         self.maze_manager.add_maze(self.maze)
