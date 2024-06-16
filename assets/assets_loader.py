@@ -82,6 +82,7 @@ class AssetsLoader:
             "run_ai_button_hovered": os.path.join(
                 _buttonDir, "run_ai_button_hovered.png"
             ),
+            "selection_button": os.path.join(_buttonDir, "selection_button.png"),
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
