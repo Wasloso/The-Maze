@@ -3,6 +3,7 @@ from pygame.sprite import Sprite
 from pygame import Surface
 from pygame.event import Event
 from pygame import mouse
+from pygame.font import Font
 
 
 """Base class for all UI components"""
@@ -42,3 +43,12 @@ class UIComponent(Sprite):
 
     def change_image(self, image: Surface) -> None:
         self.image = scale(image, self.desired_size)
+
+    @staticmethod
+    def add_text_to_surface(
+        text: str, font: Font, text_color: tuple[int, int, int], surface: Surface
+    ) -> Surface:
+        text_surface = font.render(text, True, text_color)
+        text_rect = text_surface.get_rect(center=(surface.get_rect().center))
+        surface.blit(text_surface, text_rect.topleft)
+        return surface
