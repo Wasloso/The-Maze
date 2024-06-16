@@ -10,10 +10,21 @@ class SettingsManager:
         self.mute: bool = False
 
     def load_settings(self):
-        with open(self.path, "r") as f:
-            self.settings = json.load(f)
-            self.volume = self.settings["sound"]["volume"]
-            self.mute = self.settings["sound"]["mute"]
+        try:
+            with open(self.path, "r") as f:
+                self.settings = json.load(f)
+                self.volume = self.settings["sound"]["volume"]
+                self.mute = self.settings["sound"]["mute"]
+        except FileNotFoundError:
+            self.volume = 100
+            self.mute = False
+            self.settings = {
+                "sound": {
+                    "volume": self.volume,
+                    "mute": self.mute,
+                }
+            }
+            self.save_settings()
         self.set_game_volume()
 
     def save_settings(self):

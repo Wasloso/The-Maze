@@ -9,14 +9,17 @@ class MazeManager:
         self.mazes = []
 
     def load_mazes(self) -> None:
-        with open(self.path, "r") as f:
-            data = json.load(f)
-            if data:
-                self.mazes = [Maze.from_json(maze) for maze in data["mazes"]]
+        try:
+            with open(self.path, "r") as f:
+                data = json.load(f)
+                if data:
+                    self.mazes = [Maze.from_json(maze) for maze in data["mazes"]]
+        except FileNotFoundError:
+            self.mazes = []
+            self.save_mazes()
 
     def save_mazes(self) -> None:
         mazes = [maze.to_json() for maze in self.mazes]
-
         with open(self.path, "w") as f:
             # TODO: add better formatting
             data: str = json.dumps({"mazes": mazes}, indent=4)
