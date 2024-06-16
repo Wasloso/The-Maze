@@ -1,12 +1,13 @@
 from maze import Player
 from . import ScreenBase
-from .screen_base import MAZE_CREATOR, MAZE_SELECTION, MAIN_MENU
+from .screen_base import MAZE_CREATOR
 from maze.maze import Maze
 from maze.cell import Cell
 from pygame.surface import Surface
 from typing import Optional
 from ui_components.button import Button
 from assets.assets_loader import AssetsLoader
+from pygame.transform import scale
 import pygame
 
 
@@ -19,8 +20,7 @@ class MazeCreatorScreen(ScreenBase):
         maze: Maze = None,
     ) -> None:
         super().__init__(previous_screen, manager, screen_name=MAZE_CREATOR)
-        self.player_img = AssetsLoader.get_player("idle")
-        self.objective_img = AssetsLoader.get_objective()
+
         self.maze_manager = maze_manager
         self.maze: Maze = maze
         self.confirm_button = Button(
@@ -34,6 +34,15 @@ class MazeCreatorScreen(ScreenBase):
             maze = Maze(40)
             maze.create_grid()
             self.maze = maze
+
+        self.player_img = scale(
+            AssetsLoader.get_player("idle"),
+            (self.maze.cell_size // 3, self.maze.cell_size // 3),
+        )
+        self.objective_img = scale(
+            AssetsLoader.get_objective(),
+            (self.maze.cell_size // 2, self.maze.cell_size // 2),
+        )
         self.randomize_button = Button(
             desired_size=(50, 50),
             image=AssetsLoader.get_button("randomize_button"),
@@ -77,7 +86,8 @@ class MazeCreatorScreen(ScreenBase):
             surface.blit(
                 self.wall_img if cell.collidable else self.floor_img, cell.rect.topleft
             )
-            for row in self.maze.grid for cell in row
+            for row in self.maze.grid
+            for cell in row
         ]
         [button.draw(surface) for button in self.cell_buttons]
 
@@ -90,12 +100,9 @@ class MazeCreatorScreen(ScreenBase):
             rect.center = self.maze.player_start
             surface.blit(self.player_img, rect)
         if self.maze.objective_position:
-            img = pygame.transform.scale(
-                self.objective_img, (self.maze.cell_size, self.maze.cell_size)
-            )
-            rect = img.get_rect()
+            rect = self.objective_img.get_rect()
             rect.center = self.maze.objective_position
-            surface.blit(img, rect)
+            surface.blit(self.objective_img, rect)
 
     def update(self, events, keys) -> None:
         for event in events:

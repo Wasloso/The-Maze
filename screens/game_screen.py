@@ -50,8 +50,7 @@ class GameScreen(ScreenBase):
 
         self.visibility_scale: int = 5
         self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
-        self.fog_overlay.fill((0, 0, 0))
-        self.fog_overlay.set_alpha(128)
+        self.fog_overlay.fill((0, 0, 0, 128))
         self.completed = False
         self.start_time = counter()
 
@@ -110,10 +109,9 @@ class GameScreen(ScreenBase):
 
         self.player.update(events, keys)
 
-        if self.objective.check_collision(self.player.rect):
-            if not self.completed:
-                self.completed = True
-                self.end_time = counter()
+        if not self.completed and self.objective.check_collision(self.player.rect):
+            self.completed = True
+            self.end_time = counter()
 
     def handle_buttons_click(self, keys) -> None:
         multiplier: int = 2 if keys[pygame.K_LSHIFT] else 1
