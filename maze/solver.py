@@ -11,7 +11,6 @@ class Solver:
         self.player = player
         self.solution = self.a_star()
         self.last_dir = None
-        print(self.solution[0])
 
     def a_star(self):
         def heuristic(start_pos, end_pos):
@@ -25,7 +24,10 @@ class Solver:
             total_path.reverse()
             return total_path
 
-        player_pos, objective_pos = self.maze.player_start_pos, self.maze.objective_position_pos
+        player_pos, objective_pos = (
+            self.maze.player_start_pos,
+            self.maze.objective_position_pos,
+        )
         open_set = [(0, player_pos)]
         came_from = {}
         cost_so_far = {player_pos: 0}
@@ -38,10 +40,16 @@ class Solver:
             # Find if cell is collidable in each direction [TOP, RIGHT, LEFT, BOTTOM]
             for next_pos in [(-1, 0), (0, 1), (0, -1), (1, 0)]:
                 new_pos = tuple(map(sum, zip(current_pos, next_pos)))
-                if 0 <= new_pos[1] < self.maze.rows and 0 <= new_pos[0] < self.maze.columns:
+                if (
+                    0 <= new_pos[0] < self.maze.rows
+                    and 0 <= new_pos[1] < self.maze.columns
+                ):
                     if self.maze.grid[new_pos[0]][new_pos[1]].collidable == 0:
                         new_cost = cost_so_far.get(current_pos) + 1
-                        if new_pos not in cost_so_far or new_cost < cost_so_far[new_pos]:
+                        if (
+                            new_pos not in cost_so_far
+                            or new_cost < cost_so_far[new_pos]
+                        ):
                             cost_so_far[new_pos] = new_cost
                             priority = new_cost + heuristic(new_pos, objective_pos)
                             heappush(open_set, (priority, new_pos))
