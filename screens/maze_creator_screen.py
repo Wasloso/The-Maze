@@ -77,7 +77,7 @@ class MazeCreatorScreen(ScreenBase):
             surface.blit(
                 self.wall_img if cell.collidable else self.floor_img, cell.rect.topleft
             )
-            for cell in self.cells
+            for row in self.maze.grid for cell in row
         ]
         [button.draw(surface) for button in self.cell_buttons]
 

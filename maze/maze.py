@@ -35,6 +35,8 @@ class Maze:
         return grid
 
     def randomize_maze(self) -> None:
+        self.grid = self.create_grid()
+
         def get_frontier(cell: Cell) -> list[Cell]:
             frontier = []
             for direction in Direction:
