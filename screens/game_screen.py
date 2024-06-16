@@ -50,7 +50,8 @@ class GameScreen(ScreenBase):
 
         self.visibility_scale: int = 5
         self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
-        self.fog_overlay.fill((0, 0, 0, 128))
+        self.fog_overlay.fill((0, 0, 0))
+        self.fog_overlay.set_alpha(128)
         self.completed = False
         self.start_time = counter()
 
