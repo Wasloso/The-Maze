@@ -1,3 +1,5 @@
 *__pycache__
 .venv
 .vscode
+/data/settings.json
+/data/saved_mazes.json

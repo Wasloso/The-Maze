@@ -2,12 +2,15 @@ import json
 
 from pygame import Surface
 
-from .screen_base import *
+from ui_components import UIComponent
+from . import ScreenBase
+
 import pygame
 from pygame.sprite import Group
 
 from ui_components.button import Button
 from assets.assets_loader import AssetsLoader
+from .screen_base import MAIN_MENU
 
 
 class MainMenu(ScreenBase):
@@ -20,45 +23,56 @@ class MainMenu(ScreenBase):
 
         alt = pygame.surface.Surface((200, 100))
         alt.fill((255, 0, 0))
+
+        AssetsLoader.load_music("background")
+        pygame.mixer.music.play(-1)
+
         file = open("data/saved_mazes.json", "r")
         # FIXME: Loading a maze shouldn't be done here.
         #  User should have the option to choose maze to load when pressing the play button
         data = json.load(file)
-        from maze import Maze
-        maze = Maze.from_json(data["Spiral"])
+        self.the_maze_text = UIComponent(image=AssetsLoader.get_text("the_maze"))
+
         self.play_button = Button(
             image=AssetsLoader.get_button("play_button"),
+            alt_image=AssetsLoader.get_button("play_button", hovered=True),
+            desired_size=(300, 100),
             position=(self.width // 2, self.height // 2 - 50),
-            callback=lambda: self.manager.start_game(self, self.manager, maze),
+            callback=lambda: self.manager.maze_selection(self, self.manager),
         )
         self.settings_button = Button(
-            image=AssetsLoader.get_button("setting_button"),
+            image=AssetsLoader.get_button("settings_button"),
+            alt_image=AssetsLoader.get_button("settings_button", hovered=True),
+            desired_size=(550, 100),
             position=(self.width // 2, self.height // 2 + 100),
-            callback=lambda: self.manager.options(self, self.manager),
-            altImage=alt,
+            callback=lambda: self.manager.settings(self, self.manager),
         )
-        self.exit_button = Button(
-            image=AssetsLoader.get_button("exit_button"),
+        self.quit_button = Button(
+            image=AssetsLoader.get_button("quit_button"),
+            alt_image=AssetsLoader.get_button("quit_button", hovered=True),
+            desired_size=(150, 50),
             position=(150, self.height - 100),
-            altImage=alt,
             callback=lambda: self.manager.back(None),
         )
         self.credits_button = Button(
             image=AssetsLoader.get_button("credits_button"),
+            alt_image=AssetsLoader.get_button("credits_button", hovered=True),
+            desired_size=(225, 50),
             position=(self.width - 150, self.height - 100),
-            altImage=alt,
             callback=lambda: self.manager.credits(self, self.manager),
         )
         self.buttons: Group[Button] = pygame.sprite.Group(
             self.play_button,
             self.settings_button,
-            self.exit_button,
+            self.quit_button,
             self.credits_button,
         )
-        self.selected_maze = None
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
+        self.the_maze_text.draw(
+            surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50)
+        )
         # TODO: z jakiegos powodu uzywanie self.buttons.draw sprawia ze one sie nie aktualizuja (readme)
         for button in self.buttons:
             button.draw(surface)
@@ -67,5 +81,6 @@ class MainMenu(ScreenBase):
         for event in events:
             self.buttons.update(event)
 
-    def open_options(self):
-        super().change_screen(OPTIONS, self.screen_surface)
+
+if __name__ == "__main__":
+    pass
