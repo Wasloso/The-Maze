@@ -56,7 +56,6 @@ class GameScreen(ScreenBase):
         self.start_time = counter()
 
     def back(self):
-        del self.solver
         self.manager.back(self.previous_screen)
 
     def draw(self, surface: Surface) -> None:

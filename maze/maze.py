@@ -62,7 +62,8 @@ class Maze:
             if number_of_path_cells == 1:
                 next_cell.collidable = False
                 frontier += neighbour_cells
-            last_pos = next_cell
+            if next_cell.collidable is False:
+                last_pos = next_cell
         self.objective_position = last_pos.rect.center
 
     @property

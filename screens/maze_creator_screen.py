@@ -114,29 +114,25 @@ class MazeCreatorScreen(ScreenBase):
                 event.type == pygame.MOUSEBUTTONDOWN
                 and event.button == pygame.BUTTON_RIGHT
             ):
-                pos = pygame.mouse.get_pos()
-                grid_pos = self.maze.get_cell_index(*pos)
-                objective_pos = (
-                    self.maze.get_cell_index(*self.maze.objective_position)
-                    if self.maze.objective_position
-                    else None
-                )
-                player_pos = (
-                    self.maze.get_cell_index(*self.maze.player_start)
-                    if self.maze.player_start
-                    else None
-                )
+                grid_pos = self.maze.get_cell_index(*pygame.mouse.get_pos())
+                if not self.maze.grid[grid_pos[1]][grid_pos[0]].collidable:
+                    objective_pos = (
+                        self.maze.get_cell_index(*self.maze.objective_position)
+                        if self.maze.objective_position
+                        else None
+                    )
+                    player_pos = (
+                        self.maze.get_cell_index(*self.maze.player_start)
+                        if self.maze.player_start
+                        else None
+                    )
 
-                if keys[pygame.K_LSHIFT] and grid_pos != player_pos:
-                    self.maze.objective_position = self.maze.get_rect_position(
-                        grid_pos[1], grid_pos[0]
-                    )
-                    self.maze.objective_position_pos = grid_pos[1], grid_pos[0]
-                elif grid_pos != objective_pos:
-                    self.maze.player_start = self.maze.get_rect_position(
-                        grid_pos[1], grid_pos[0]
-                    )
-                    self.maze.player_start_pos = grid_pos[1], grid_pos[0]
+                    if keys[pygame.K_LSHIFT] and grid_pos != player_pos:
+                        self.maze.objective_position = self.maze.get_rect_position(grid_pos[1], grid_pos[0])
+                        self.maze.objective_position_pos = grid_pos[1], grid_pos[0]
+                    elif grid_pos != objective_pos:
+                        self.maze.player_start = self.maze.get_rect_position(grid_pos[1], grid_pos[0])
+                        self.maze.player_start_pos = grid_pos[1], grid_pos[0]
             if (
                 self.maze.player_start
                 and self.maze.objective_position
