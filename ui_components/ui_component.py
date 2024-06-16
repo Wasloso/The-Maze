@@ -46,9 +46,25 @@ class UIComponent(Sprite):
 
     @staticmethod
     def add_text_to_surface(
-        text: str, font: Font, text_color: tuple[int, int, int], surface: Surface
+        text: str | list[str],
+        font: Font,
+        text_color: tuple[int, int, int],
+        surface: Surface,
     ) -> Surface:
-        text_surface = font.render(text, True, text_color)
-        text_rect = text_surface.get_rect(center=(surface.get_rect().center))
-        surface.blit(text_surface, text_rect.topleft)
+        if type(text) == list:
+            for i, line in enumerate(text):
+                text_surface = font.render(line, True, text_color)
+                text_rect = text_surface.get_rect(
+                    center=(
+                        surface.get_width() // 2,
+                        surface.get_height() // (len(text) + 1)
+                        + (i + 1) * font.size(" ")[1],
+                    )
+                )
+                surface.blit(text_surface, text_rect)
+                surface.blit(text_surface, text_rect.topleft)
+        else:
+            text_surface = font.render(text, True, text_color)
+            text_rect = text_surface.get_rect(center=(surface.get_rect().center))
+            surface.blit(text_surface, text_rect.topleft)
         return surface
