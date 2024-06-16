@@ -1,10 +1,6 @@
 from ui_components.button import Button
 from .screen_base import *
-import pygame
 from pygame.surface import Surface
-import sys
-
-sys.path.append("../")
 from ui_components.volume_controller import VolumeController
 from ui_components.ui_component import UIComponent
 from data import SettingsManager

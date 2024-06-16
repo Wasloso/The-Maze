@@ -1,6 +1,6 @@
 import json
 
-from maze.maze import Maze
+from maze import Maze
 
 
 class MazeManager:
@@ -8,15 +8,13 @@ class MazeManager:
         self.path = path
         self.mazes = []
 
-    def load_mazes(self) -> list[Maze]:
+    def load_mazes(self) -> None:
         with open(self.path, "r") as f:
             data = json.load(f)
             if data:
-                data = data["mazes"]
-                self.mazes = [Maze.from_json(maze) for maze in data]
-        return self.mazes
+                self.mazes = [Maze.from_json(maze) for maze in data["mazes"]]
 
-    def save_mazes(self):
+    def save_mazes(self) -> None:
         mazes = [maze.to_json() for maze in self.mazes]
 
         with open(self.path, "w") as f:
@@ -25,7 +23,7 @@ class MazeManager:
             data.replace("    ", "\t")
             f.write(data)
 
-    def add_maze(self, maze):
+    def add_maze(self, maze: Maze) -> None:
         if maze.name is None:
             name = 0
             while any(m.name == name for m in self.mazes):

@@ -1,13 +1,9 @@
 from pygame import Rect
 from pygame.surface import Surface
 
-from maze.cell import Cell
-from maze.maze import Maze
-from maze.objective import Objective
-from maze.player import Player
-from maze.solver import Solver
+from maze import Maze, Direction, Objective, Cell, Player, Solver
 from screens.screen_base import *
-from ui_components.button import Button
+from ui_components import Button
 from assets.assets_loader import AssetsLoader
 
 
@@ -22,13 +18,12 @@ class GameScreen(ScreenBase):
         super().__init__(previous_screen, manager, GAME)
         self.maze: Maze = maze
         self.ai: bool = ai
-        player_img: Surface = AssetsLoader.get_player("idle" if not ai else "idle_ai")
 
         self.player: Player = Player(
             start_position=self.maze.player_start,
             velocity=2,
             size=self.maze.cell_size // 3,
-            image=player_img,
+            image=AssetsLoader.get_player("idle" if not ai else "idle_ai"),
         )
         self.objective: Objective = Objective(
             position=self.maze.objective_position, size=self.maze.cell_size // 2
@@ -54,10 +49,7 @@ class GameScreen(ScreenBase):
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
         for cell in self.cells:
-            if cell.collidable:
-                surface.blit(self.wallImage, cell.rect.topleft)
-            else:
-                surface.blit(self.floorImage, cell.rect.topleft)
+            surface.blit(self.wallImage if cell.collidable else self.floorImage, cell.rect.topleft)
         self.player.draw(surface)
         self.objective.draw(surface)
         self.back_button.draw(surface)
@@ -80,13 +72,13 @@ class GameScreen(ScreenBase):
     def handle_buttons_click(self, keys) -> None:
         multiplier: int = 2 if keys[pygame.K_LSHIFT] else 1
         if keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.move_player(pygame.K_UP, multiplier)
+            self.move_player(Direction.UP, multiplier)
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.move_player(pygame.K_DOWN, multiplier)
+            self.move_player(Direction.DOWN, multiplier)
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.move_player(pygame.K_LEFT, multiplier)
+            self.move_player(Direction.LEFT, multiplier)
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.move_player(pygame.K_RIGHT, multiplier)
+            self.move_player(Direction.RIGHT, multiplier)
 
     def move_player(self, direction, multiplier=1) -> None:
         new_rect: Rect = self.player.try_move(direction, multiplier)

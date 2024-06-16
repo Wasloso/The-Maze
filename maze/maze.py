@@ -1,38 +1,28 @@
-import math
-from .cell import Cell
+from __future__ import annotations
 import random
-from pygame import Surface
-import json
-import ast
+
+from maze import Cell
 
 
 class Maze:
-    collidable_cells = None
-
     def __init__(
-        self,
-        cell_size: int,
-        rows: int = 20,
-        columns: int = 32,
-        player_start: tuple[int, int] = None,
-        objective_position: tuple[int, int] = None,
-        name: str = None,
+            self,
+            cell_size: int,
+            rows: int = 20,
+            columns: int = 32,
+            player_start: tuple[int, int] = None,
+            objective_position: tuple[int, int] = None,
+            name: str = None,
     ):
         self.rows: int = rows
         self.columns: int = columns
         self.cell_size: int = cell_size
         self.player_start = player_start
         self.objective_position = objective_position
-        self.grid: list[list[Cell]] = None
+        self.grid: list[list[Cell]] = []
         self.name = name
         self.player_start_pos = None
         self.objective_position_pos = None
-
-    def set_player_start(self, x, y):
-        self.player_start = (x, y)
-
-    def set_objective_position(self, x, y):
-        self.objective_position = (x, y)
 
     def create_grid(self) -> list[list[Cell]]:
         grid = []
@@ -40,7 +30,7 @@ class Maze:
             row = []
             for x in range(self.columns):
                 cell = Cell(
-                    self.cell_size, x, y, True
+                    x, y, self.cell_size, True
                 )
                 row.append(cell)
             grid.append(row)
@@ -80,59 +70,45 @@ class Maze:
 
     def change_collidable(self, column, row):
         self.grid[row][column].change_collidable()
-        if self.grid[row][column].collidable:
-            self.collidable_cells.append(self.grid[row][column])
-        else:
-            self.collidable_cells.remove(self.grid[row][column])
 
     @staticmethod
-    def from_json(json):
+    def from_json(json) -> Maze:
         grid = json["grid"]
-        columns = len(grid)
-        rows = len(grid[0])
-        name = json["name"]
-        maze = Maze(json["cell_size"], rows, columns, name=name)
-        maze.grid = []
-        for j, row in enumerate(grid):
+
+        maze = Maze(json["cell_size"], len(grid[0]), len(grid), name=json["name"])
+        for i, row in enumerate(grid):
             maze_row = []
-            for i, cell in enumerate(row):
-                if cell == 1:
-                    cell = Cell(
-                        maze.cell_size, i, j, True
-                    )
-                    maze_row.append(cell)
-                else:
-                    if cell == "P":
-                        maze.player_start_pos = (j, i)
-                        maze.player_start = maze.set_rect_position(j, i)
-                    elif cell == "O":
-                        maze.objective_position_pos = (j, i)
-                        maze.objective_position = maze.set_rect_position(j, i)
-                    maze_row.append(
-                        Cell(
-                            maze.cell_size, i, j,
-                            False,
-                        )
-                    )
+            for j, cell in enumerate(row):
+                collidable: bool = cell
+                if cell == "P":
+                    maze.player_start_pos = (i, j)
+                    maze.player_start = maze.get_rect_position(i, j)
+                    collidable = False
+                if cell == "O":
+                    maze.objective_position_pos = (i, j)
+                    maze.objective_position = maze.get_rect_position(i, j)
+                    collidable = False
+
+                maze_row.append(Cell(j, i, maze.cell_size, collidable))
             maze.grid.append(maze_row)
         return maze
 
     def to_json(self) -> dict:
-        player_pos = self.get_rect_pos_in_grid(*self.player_start)
-        objective_pos = self.get_rect_pos_in_grid(*self.objective_position)
+        player_pos = self.get_cell_index(*self.player_start)
+        objective_pos = self.get_cell_index(*self.objective_position)
         grid = []
         for row in self.grid:
             grid_row = []
             for cell in row:
                 if (
-                    row.index(cell) == player_pos[0]
-                    and self.grid.index(row) == player_pos[1]
+                        row.index(cell) == player_pos[0]
+                        and self.grid.index(row) == player_pos[1]
                 ):
                     grid_row.append("P")
 
                 elif (
-                    row.index(cell) == objective_pos[0]
-                    and self.grid.index(row) == objective_pos[1]
+                        row.index(cell) == objective_pos[0]
+                        and self.grid.index(row) == objective_pos[1]
                 ):
                     grid_row.append("O")
                 elif cell.collidable:
@@ -146,11 +122,8 @@ class Maze:
             "grid": grid,
         }
 
-    def get_rect_pos_in_grid(self, x, y):
+    def get_cell_index(self, x, y):
         return x // self.cell_size, y // self.cell_size
 
-    def set_rect_position(self, row, column):
-        return (
-            column * self.cell_size + self.cell_size // 2,
-            row * self.cell_size + self.cell_size // 2,
-        )
+    def get_rect_position(self, row, column):
+        return column * self.cell_size + self.cell_size // 2, row * self.cell_size + self.cell_size // 2

@@ -1,6 +1,8 @@
 from heapq import heappop, heappush
 
-from maze import Maze, Player
+# Not modular import to avoid circular import
+from .maze import Maze
+from .player import Player
 
 
 class Solver:
@@ -50,8 +52,8 @@ class Solver:
     def update(self):
         if self.solution:
             target_pos = self.solution[0]
-            if self.player.rect.center != self.maze.set_rect_position(*target_pos):
-                player_x, player_y = self.maze.get_rect_pos_in_grid(*self.player.rect.center)
+            if self.player.rect.center != self.maze.get_rect_position(*target_pos):
+                player_x, player_y = self.maze.get_cell_index(*self.player.rect.center)
                 player_x = target_pos[1] - player_x
                 player_y = target_pos[0] - player_y
                 if (player_x, player_y) == (0, 0):
