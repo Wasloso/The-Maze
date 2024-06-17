@@ -1,7 +1,7 @@
 # The Maze
 Welcome to The Maze!
 # Description
-In this game, you will be place in a maze trying to find a treasure hidden deep within. 
+In this game, you will be placed in a maze trying to find a treasure hidden deep within. 
 # How to Play
 You can navigate through the maze by moving up, down, left, or right or WSAD keys.
 Your goal is to find the treasure.
