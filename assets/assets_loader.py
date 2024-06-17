@@ -7,7 +7,7 @@ from functools import lru_cache
 
 # I think it can be done better
 class AssetsLoader:
-    _dir = "assets"
+    _dir = os.path.dirname(__file__)
     _backgroundDir = os.path.join(_dir, "backgrounds")
     _buttonDir = os.path.join(_dir, "buttons")
     _playerDir = os.path.join(_dir, "player")

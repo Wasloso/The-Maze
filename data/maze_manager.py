@@ -1,9 +1,12 @@
 import json
 from maze import Maze
+import os
 
 
 class MazeManager:
-    def __init__(self, path: str = "data/saved_mazes.json") -> None:
+    def __init__(
+        self, path: str = f"{os.path.dirname(__file__)}/saved_mazes.json"
+    ) -> None:
         self.path: str = path
         self.mazes: list[Maze] = []
 

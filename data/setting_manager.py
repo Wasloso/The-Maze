@@ -1,11 +1,13 @@
 import json
 import pygame
-
+import os
 from assets.assets_loader import AssetsLoader
 
 
 class SettingsManager:
-    def __init__(self, path: str = "data/settings.json") -> None:
+    def __init__(
+        self, path: str = f"{os.path.dirname(__file__)}/settings.json"
+    ) -> None:
         self.path: str = path
         self.settings: dict[str, bool | int] = None
         self.volume: int = None

@@ -9,6 +9,7 @@ setup(
     author="Partyk Łuszczek & Tymoteusz Lango",
     url="https://github.com/Wasloso/TheMaze",
     packages=find_packages(),
+    include_package_data=True,
     install_requires=["pygame>=2.0.0"],
     entry_points={
         "console_scripts": [
