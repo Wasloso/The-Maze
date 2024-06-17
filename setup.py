@@ -13,7 +13,7 @@ setup(
     install_requires=['pygame>=2.0.0'],
     entry_points={
         'console_scripts': [
-            'themaze=app:main',  # Replace with the entry point of your app
+            'themaze=app:main',
         ],
     },
     classifiers=[
