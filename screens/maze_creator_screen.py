@@ -23,9 +23,15 @@ class MazeCreatorScreen(ScreenBase):
 
         self.maze_manager = maze_manager
         self.maze: Maze = maze
+        self.back_button: Button = Button.go_back_button(
+            position=(25, 25),
+            desired_size=(50, 50),
+            callback=lambda: self.manager.back(self.previous_screen),
+        )
+
         self.confirm_button = Button(
             desired_size=(50, 50),
-            position=(25, 25),
+            position=(75, 25),
             image=AssetsLoader.get_button("confirm_button"),
             alt_image=AssetsLoader.get_button("confirm_button", hovered=True),
             callback=(lambda: self.manager.back(previous_screen)) if maze else None,
@@ -90,7 +96,7 @@ class MazeCreatorScreen(ScreenBase):
             for cell in row
         ]
         [button.draw(surface) for button in self.cell_buttons]
-
+        self.back_button.draw(surface)
         self.confirm_button.draw(surface)
         self.randomize_button.rect.topright = surface.get_rect().topright
         self.randomize_button.draw(surface)
@@ -107,6 +113,7 @@ class MazeCreatorScreen(ScreenBase):
     def update(self, events, keys) -> None:
         for event in events:
             self.confirm_button.update(event)
+            self.back_button.update(event)
             self.randomize_button.update(event)
             [button.update(event) for button in self.cell_buttons]
 
@@ -133,11 +140,7 @@ class MazeCreatorScreen(ScreenBase):
                     elif grid_pos != objective_pos:
                         self.maze.player_start = self.maze.get_rect_position(grid_pos[1], grid_pos[0])
                         self.maze.player_start_pos = grid_pos[1], grid_pos[0]
-            if (
-                self.maze.player_start
-                and self.maze.objective_position
-                and self.confirm_button.callback is None
-            ):
+            if self.maze.player_start and self.maze.objective_position and self.confirm_button.callback is None:
                 self.confirm_button.callback = lambda m=self.maze: self.add_maze()
 
     def add_maze(self):
