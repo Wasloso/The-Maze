@@ -24,7 +24,7 @@ class GameScreen(ScreenBase):
         self.player: Player = Player(
             start_position=self.maze.player_start,
             velocity=2,
-            size=self.maze.cell_size // 3,
+            size=self.maze.cell_size // 2,
             image=AssetsLoader.get_player("idle" if not ai else "idle_ai"),
         )
         self.objective: Objective = Objective(
@@ -48,7 +48,7 @@ class GameScreen(ScreenBase):
         if self.ai:
             self.solver = Solver(self.maze, self.player)
 
-        self.visibility_scale: int = 5
+        self.visibility_scale: int = maze.cell_size // self.player.rect.width
         self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
         self.fog_overlay.fill((0, 0, 0))
         self.fog_overlay.set_alpha(128)
