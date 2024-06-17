@@ -1,0 +1,3 @@
+recursive-include package *
+include assets/*
+include data/*.json
