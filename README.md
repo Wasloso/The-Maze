@@ -1,50 +1,17 @@
-
-# The maze
-
-bla bla bla descripton
-
-# TODO
-- Settings
-    - Settings manager
-    - Settings screen
-        - Volume controller
-        - optional: Dark/Light mode 
-        - ???
-- Maze
-    - Mazes manager (play_screen)
-        - Load saved mazes
-        - Add new
-        - Delete existing
-        - Modify
-        - Maze creator
-    - Fog of war
-    - "AI"
-    - should we change cell to be Sprite subclass, so we can use cells.draw() instead of for cell in cells...???
-    - POWER UPS IF WE GET BORED
-        - can go through a wall
-        - teleport closer to the objective
-        - extra speeeeeeeeeeed
-        - go rainbow like mario
-        - spawn an enemy that chases you for idk 10 seconds 
-- Assets
-    - Graphics
-        - Backgrounds
-        - Buttons
-        - Player
-            - optional: Different images for each direction (up, down etc.) 
-        - Maze
-            - wall
-            - floors
-            - optional: Different image depending on neighbors eg. when a floor cell has floor cell to the right the floor image is a right-way path etc
-        - Objective
-    - Sounds:
-        - walking
-        - background music
-        - achieved objective
-
-# TO BE FIXED
-- Buttons
-    - can't create a sprites.group() as the draw() method doesnt work properly
-
-
-
+# The Maze
+Welcome to The Maze!
+# Description
+In this game, you will be place in a maze trying to find a treasure hidden deep within. 
+# How to Play
+You can navigate through the maze by moving up, down, left, or right or WSAD keys.
+Your goal is to find the treasure.
+# Creating new mazes
+You can create your own maze by clicking on the "add" button on the bottom of the play screen.
+By clicking left mouse button, you can change the 'cell' to a wall or a path.
+Click right mouse button to place a player on the cell, hold shift and click right mouse button to place a treasure on the cell.
+# Editing mazes
+You can also edit already created mazes by clicking on the "edit" button on the bottom of the play screen.
+Editing works the same way as creating a new maze.
+# Auto solving
+You can also let the computer solve the maze for you by clicking on the "solve" button on the bottom of the play screen.
+# Enjoy the game!
