@@ -1,14 +1,15 @@
-from maze import Player
+from typing import Optional
+
+import pygame
+from pygame.surface import Surface
+from pygame.transform import scale
+
+from assets.assets_loader import AssetsLoader
+from maze.cell import Cell
+from maze.maze import Maze
+from ui_components.button import Button
 from . import ScreenBase
 from .screen_base import MAZE_CREATOR
-from maze.maze import Maze
-from maze.cell import Cell
-from pygame.surface import Surface
-from typing import Optional
-from ui_components.button import Button
-from assets.assets_loader import AssetsLoader
-from pygame.transform import scale
-import pygame
 
 
 class MazeCreatorScreen(ScreenBase):
