@@ -79,6 +79,7 @@ class AssetsLoader:
         },
         "player": {
             "idle": os.path.join(_playerDir, "idle.png"),
+            "idle_ai": os.path.join(_playerDir, "idle_ai.png"),
             "walk_UP": os.path.join(_playerDir, "walk_UP.png"),
             "walk_DOWN": os.path.join(_playerDir, "walk_DOWN.png"),
             "walk_LEFT": os.path.join(_playerDir, "walk_LEFT.png"),
