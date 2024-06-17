@@ -3,6 +3,7 @@ import json
 from pygame import Surface
 
 from ui_components import UIComponent
+from ui_components.button_group import ButtonGroup
 from . import ScreenBase
 
 import pygame
@@ -54,27 +55,19 @@ class MainMenu(ScreenBase):
             position=(self.width - 150, self.height - 100),
             callback=lambda: self.manager.credits(self, self.manager),
         )
-        self.buttons: Group[Button] = pygame.sprite.Group(
+
+        self.buttons = ButtonGroup(
             self.play_button,
             self.settings_button,
             self.quit_button,
-            self.credits_button,
+            self.credits_button
         )
-        # self.buttons.add(self.play_button)
-        print(self.buttons)
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
         self.the_maze_text.draw(surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50))
-        # self.buttons.draw(surface)
-        # TODO: z jakiegos powodu uzywanie self.buttons.draw sprawia ze one sie nie aktualizuja (readme)
-        for button in self.buttons:
-            button.draw(surface)
+        self.buttons.draw(surface)
 
     def update(self, events, keys) -> None:
         for event in events:
             self.buttons.update(event)
-
-
-if __name__ == "__main__":
-    pass

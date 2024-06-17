@@ -1,11 +1,8 @@
 from __future__ import annotations
-import pygame
-from pygame.sprite import Sprite
-from pygame.font import Font
-from .ui_component import UIComponent
-import sys
 
-sys.path.append("../")
+import pygame
+
+from .ui_component import UIComponent
 from assets.assets_loader import AssetsLoader
 
 
@@ -21,9 +18,7 @@ class Button(UIComponent):
         """Image is the main display image. alt_image appears when the button is hovered"""
         super().__init__(position, desired_size, image)
         self.desired_size = desired_size
-        self.altImage = (
-            pygame.transform.scale(alt_image, desired_size) if alt_image else None
-        )
+        self.altImage = (pygame.transform.scale(alt_image, desired_size) if alt_image else None)
         self.rect.center = position  # FIXME: change to topleft for consitency (need to adjust some positions in other files)
         self.displayImage = self.image
         self.callback = callback
