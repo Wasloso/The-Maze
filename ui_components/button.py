@@ -4,7 +4,7 @@ import pygame
 from pygame.surface import Surface
 from pygame.event import Event
 from typing import Callable, Optional
-from .ui_component import UIComponent
+from .ui_component import UIComponent, Anchor
 from assets.assets_loader import AssetsLoader
 
 
@@ -16,23 +16,21 @@ class Button(UIComponent):
         alt_image: Surface = None,
         callback: Optional[Callable] = None,
         desired_size=(200, 100),
+        anchor=Anchor.TOP_LEFT
     ) -> None:
         """Image is the main display image. alt_image appears when the button is hovered"""
-        super().__init__(position, desired_size, image)
+        super().__init__(position, desired_size, image, anchor=anchor)
         self.desired_size: tuple[int, int] = desired_size
         self.altImage = (
             pygame.transform.scale(alt_image, desired_size) if alt_image else None
         )
-        self.rect.center = position
+        self.move(position)
         self.displayImage: Surface = self.image
         self.callback: Callable = callback
 
     def draw(self, screen: Surface, position: tuple[int, int] = None) -> None:
-        if not position:
-            position = self.rect.topleft
-        elif position != self.rect:
-            self.rect.topleft = position
-        screen.blit(self.displayImage, position)
+        self.move(position)
+        screen.blit(self.displayImage, self.rect)
 
     def update(self, event: Event) -> None:
         hovered = self.check_hovered()

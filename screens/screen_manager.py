@@ -1,14 +1,12 @@
 import sys
 
 import pygame
-from . import (
-    MazeSelectionScreen,
-    GameScreen,
-    CreditsScreen,
-    SettingsScreen,
-    MazeCreatorScreen,
-    ScreenBase,
-)
+from .credits_screen import CreditsScreen
+from .game_screen import GameScreen
+from .maze_selection_screen import MazeSelectionScreen
+from .settings_screen import SettingsScreen
+from .maze_creator_screen import MazeCreatorScreen
+from .screen_base import ScreenBase
 from data import SettingsManager
 
 
