@@ -1,11 +1,12 @@
 from .screen_base import *
 from typing import Optional
 from pygame.surface import Surface
-from pygame import BLEND_RGBA_ADD, Surface
+from pygame import Surface
 from pygame.font import Font
 from ui_components.button import Button
 from data import MazeManager
 from ui_components.ui_component import UIComponent
+from maze.maze import Maze
 
 
 class MazeSelectionScreen(ScreenBase):
@@ -15,9 +16,9 @@ class MazeSelectionScreen(ScreenBase):
         self.selection_buttons: list[Button] = []
         self.maze_manager = MazeManager()
         self.maze_manager.load_mazes()
-        self.selected_maze = None
-        self.scroll_offset = 0
-        self.scroll_max = 0
+        self.selected_maze: Optional[Maze] = None
+        self.scroll_offset: int = 0
+        self.scroll_max: int = 0
 
         self.add_selection_buttons()
 
@@ -77,14 +78,14 @@ class MazeSelectionScreen(ScreenBase):
                 self.delete_maze(self.selected_maze) if self.selected_maze else None
             ),
         )
-        self.action_buttons = [
+        self.action_buttons: list[Button] = [
             self.play_maze_button,
             self.play_ai_button,
             self.edit_maze_button,
             self.delete_maze_button,
             self.add_maze_button,
         ]
-        self.select_maze_idx = None
+        self.select_maze_idx: int = None
 
     def draw(self, surface: Surface) -> None:
         super().draw(surface)
@@ -121,7 +122,7 @@ class MazeSelectionScreen(ScreenBase):
                 ),
             )
 
-    def add_selection_buttons(self):
+    def add_selection_buttons(self) -> None:
         self.selection_buttons.clear()
 
         text_color = (0, 0, 0)
@@ -174,11 +175,11 @@ class MazeSelectionScreen(ScreenBase):
                 elif event.button == 5:
                     self.scroll_offset = min(self.scroll_offset + 10, self.scroll_max)
 
-    def select_maze(self, maze, idx):
+    def select_maze(self, maze, idx) -> None:
         self.selected_maze = maze
         self.select_maze_idx = idx
 
-    def delete_maze(self, maze):
+    def delete_maze(self, maze) -> None:
         if (
             self.select_maze_idx
             and self.maze_manager.mazes[self.select_maze_idx] == maze
@@ -188,11 +189,11 @@ class MazeSelectionScreen(ScreenBase):
         self.maze_manager.save_mazes()
         self.reload()
 
-    def back(self, previous_screen: Optional[ScreenBase] = None):
+    def back(self, previous_screen: Optional[ScreenBase] = None) -> None:
         self.maze_manager.save_mazes()
         self.manager.back(previous_screen)
 
-    def reload(self):
+    def reload(self) -> None:
         self.maze_manager.load_mazes()
         self.selected_maze = None
         self.add_selection_buttons()

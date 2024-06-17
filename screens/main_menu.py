@@ -19,7 +19,7 @@ class MainMenu(ScreenBase):
         super().__init__(None, manager, MAIN_MENU)
 
         self.manager = manager
-        self.screen_surface = screen_surface
+        self.screen_surface: Surface = screen_surface
         self.width, self.height = self.screen_surface.get_size()
 
         alt = pygame.surface.Surface((200, 100))
@@ -60,12 +60,14 @@ class MainMenu(ScreenBase):
             self.play_button,
             self.settings_button,
             self.quit_button,
-            self.credits_button
+            self.credits_button,
         )
 
     def draw(self, surface: pygame.Surface) -> None:
         super().draw(surface)
-        self.the_maze_text.draw(surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50))
+        self.the_maze_text.draw(
+            surface, (self.width // 2 - self.the_maze_text.rect.width // 2, 50)
+        )
         self.buttons.draw(surface)
 
     def update(self, events, keys) -> None:

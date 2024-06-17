@@ -2,21 +2,21 @@ from heapq import heappop, heappush
 
 # Not modular import to avoid circular import
 from .maze import Maze
-from .player import Player
+from .player import Player, Direction
 
 
 class Solver:
     def __init__(self, maze: Maze, player: Player):
-        self.maze = maze
-        self.player = player
-        self.solution = self.a_star()
+        self.maze: Maze = maze
+        self.player: Player = player
+        self.solution: list[tuple[int, int]] | None = self.a_star()
         self.last_dir = None
 
-    def a_star(self):
-        def heuristic(start_pos, end_pos):
+    def a_star(self) -> list[tuple[int, int]] | None:
+        def heuristic(start_pos, end_pos) -> int:
             return abs(start_pos[0] - end_pos[0]) + abs(start_pos[1] - end_pos[1])
 
-        def reconstruct_path(came_from, current_pos):
+        def reconstruct_path(came_from, current_pos) -> list[tuple[int, int]]:
             total_path = [current_pos]
             while current_pos in came_from:
                 current_pos = came_from[current_pos]
@@ -33,12 +33,17 @@ class Solver:
         cost_so_far = {player_pos: 0}
 
         while open_set:
-            cost, current_pos = heappop(open_set)
+            _, current_pos = heappop(open_set)
             if current_pos == objective_pos:
                 return reconstruct_path(came_from, current_pos)
 
             # Find if cell is collidable in each direction [TOP, RIGHT, LEFT, BOTTOM]
-            for next_pos in [(-1, 0), (0, 1), (0, -1), (1, 0)]:
+            for next_pos in [
+                Direction.UP.value,
+                Direction.RIGHT.value,
+                Direction.LEFT.value,
+                Direction.DOWN.value,
+            ]:
                 new_pos = tuple(map(sum, zip(current_pos, next_pos)))
                 if (
                     0 <= new_pos[0] < self.maze.rows
@@ -58,7 +63,7 @@ class Solver:
         # Failure, goal was never reached
         return None
 
-    def update(self):
+    def update(self) -> None:
         if self.solution:
             target_pos = self.solution[0]
             if self.player.rect.center != self.maze.get_rect_position(*target_pos):

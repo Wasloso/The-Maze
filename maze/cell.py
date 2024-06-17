@@ -3,7 +3,7 @@ from pygame.rect import Rect
 
 class Cell:
     def __init__(self, x: int, y: int, size: int, collidable: bool = False) -> None:
-        self.position = (x, y)
+        self.position: tuple[int, int] = (x, y)
         self.rect = Rect(x * size, y * size, size, size)
         self.collidable: bool = collidable
         self.visited: bool = False

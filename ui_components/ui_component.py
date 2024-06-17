@@ -1,7 +1,6 @@
 from pygame.transform import scale
 from pygame.sprite import Sprite
 from pygame import Surface
-from pygame.event import Event
 from pygame import mouse
 from pygame.font import Font
 

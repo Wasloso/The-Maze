@@ -5,6 +5,7 @@ from .button import Button
 from .ui_component import UIComponent
 from assets.assets_loader import AssetsLoader
 from data import SettingsManager
+from .button_group import ButtonGroup
 
 
 class VolumeController(UIComponent):
@@ -14,7 +15,7 @@ class VolumeController(UIComponent):
         desired_size: tuple[int, int],
         settings_manager: SettingsManager,
     ) -> None:
-        image = Surface(desired_size, pygame.SRCALPHA)
+        image: Surface = Surface(desired_size, pygame.SRCALPHA)
         image.fill((0, 0, 0, 0))
         super().__init__(position, desired_size, image)
         self.settings_manager: SettingsManager = settings_manager
@@ -40,7 +41,6 @@ class VolumeController(UIComponent):
             UIComponent(desired_size=(30, 40), image=self.inactive_cell_image)
             for _ in range(10)
         ]
-
         self.unmuted_image = AssetsLoader.get_button("unmuted_button")
         self.unmuted_alt = AssetsLoader.get_button("unmuted_button", hovered=True)
         self.muted_image = AssetsLoader.get_button("muted_button")
@@ -51,10 +51,12 @@ class VolumeController(UIComponent):
             desired_size=(100, 100),
             callback=lambda: self.toggle_mute(),
         )
+        self.buttons = ButtonGroup(
+            self.volume_up_button, self.volume_down_button, self.mute_button
+        )
 
     def draw(self, screen: Surface, position: tuple[int, int] = None) -> None:
         super().draw(screen, position)
-        # FIXME: adjust positions
         self.volume_text.draw(
             screen,
             position=(
@@ -97,9 +99,7 @@ class VolumeController(UIComponent):
         )
 
     def update(self, event: Event) -> None:
-        self.volume_up_button.update(event)
-        self.volume_down_button.update(event)
-        self.mute_button.update(event)
+        self.buttons.update(event)
 
     def toggle_mute(self):
         mute = self.settings_manager.toggle_mute()

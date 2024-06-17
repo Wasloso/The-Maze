@@ -5,13 +5,13 @@ from assets.assets_loader import AssetsLoader
 
 
 class SettingsManager:
-    def __init__(self, path="data/settings.json"):
-        self.path = path
-        self.settings = None
-        self.volume = None
+    def __init__(self, path: str = "data/settings.json") -> None:
+        self.path: str = path
+        self.settings: dict[str, bool | int] = None
+        self.volume: int = None
         self.mute: bool = False
 
-    def load_settings(self):
+    def load_settings(self) -> None:
         try:
             with open(self.path, "r") as f:
                 self.settings = json.load(f)
@@ -30,7 +30,7 @@ class SettingsManager:
         self.load_background_music("background")
         self.set_game_volume()
 
-    def save_settings(self):
+    def save_settings(self) -> None:
         with open(self.path, "w") as f:
             data = json.dumps(self.settings, indent=4)
             f.write(data)

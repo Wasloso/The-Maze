@@ -15,19 +15,19 @@ class Maze:
         player_start: tuple[int, int] = None,
         objective_position: tuple[int, int] = None,
         name: str = None,
-    ):
+    ) -> None:
         self.rows: int = rows
         self.columns: int = columns
         self.cell_size: int = cell_size
         self.player_start = player_start
         self.objective_position = objective_position
         self.grid: list[list[Cell]] = []
-        self.name = name
-        self.player_start_pos = None
-        self.objective_position_pos = None
+        self.name: str = name
+        self.player_start_pos: tuple[int, int] = None
+        self.objective_position_pos: tuple[int, int] = None
 
     def create_grid(self) -> list[list[Cell]]:
-        grid = []
+        grid: list[Cell] = []
         for y in range(self.rows):
             grid.append([Cell(x, y, self.cell_size, True) for x in range(self.columns)])
         self.grid = grid
@@ -37,7 +37,7 @@ class Maze:
         self.grid = self.create_grid()
 
         def get_frontier(cell: Cell) -> list[Cell]:
-            frontier = []
+            frontier: list[Cell] = []
             for direction in Direction:
                 next_cell = tuple(map(sum, zip(cell.position, direction.value)))
                 if (
@@ -83,7 +83,7 @@ class Maze:
 
     @staticmethod
     def from_json(json) -> Maze:
-        grid = json["grid"]
+        grid: dict = json["grid"]
 
         maze = Maze(json["cell_size"], len(grid), len(grid[0]), name=json["name"])
         for i, row in enumerate(grid):

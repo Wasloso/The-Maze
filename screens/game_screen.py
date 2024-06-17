@@ -12,7 +12,7 @@ class GameScreen(ScreenBase):
     def __init__(
         self,
         previous_screen: Optional[ScreenBase],
-        manager,  # FIXME: add type hint here (now gives an Importerror)
+        manager,
         maze: Maze,
         ai: bool = False,
     ) -> None:
@@ -52,10 +52,10 @@ class GameScreen(ScreenBase):
         self.fog_overlay = pygame.Surface((self.maze.cell_size, self.maze.cell_size))
         self.fog_overlay.fill((0, 0, 0))
         self.fog_overlay.set_alpha(128)
-        self.completed = False
-        self.start_time = counter()
+        self.completed: bool = False
+        self.start_time: float = counter()
 
-    def back(self):
+    def back(self) -> None:
         self.manager.back(self.previous_screen)
 
     def draw(self, surface: Surface) -> None:
